@@ -1,0 +1,8 @@
+type Query {
+    hello: Hello
+    allHellos: [Hello]
+    books(author: String): [Book]
+}
+
+
+

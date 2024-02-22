@@ -1,0 +1,25 @@
+type Address {
+    street: String!
+    city: String!
+    country: String!
+    zipCode: String
+}
+
+type Author {
+    name: String!
+    address: [Address!]!
+    originCountry: String
+}
+
+type Book {
+    title: String!
+    publisher: String!
+    author: Author!
+    released: ReleaseHistory
+}
+
+type ReleaseHistory{
+    year: Int!
+    printedEdition: Boolean
+    releaseCountry: String
+}
