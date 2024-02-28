@@ -2,6 +2,8 @@ type Query {
     hello: Hello
     allHellos: [Hello]
     books(author: String): [Book]
+    booksReleasedHistory (releasedInput: ReleaseHistoryInput! ): [Book]
+    mobileApps(mobileAppFilter: MobileAppFilter): [MobileApp]
 }
 
 
