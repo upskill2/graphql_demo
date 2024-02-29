@@ -2,3 +2,8 @@ type Hello {
     message: String!
     number: Int
 }
+
+input HelloInput {
+    message: String!
+    number: Int!
+}

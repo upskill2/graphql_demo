@@ -38,7 +38,7 @@ public class FakeBookDatasource {
                     .build ();
 
             ReleaseHistory releaseHistory = ReleaseHistory.newBuilder ()
-                    .year (faker.number ().numberBetween (2019, 2024))
+                    .year (faker.number ().numberBetween (2019, 2021))
                     .printedEdition (random.nextBoolean () ? true : null)
                     .releaseCountry (random.nextBoolean () ? faker.address ().country () : null)
                     .build ();

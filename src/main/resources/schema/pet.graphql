@@ -1,0 +1,32 @@
+"""This is a pet schema"""
+enum PetFoodType {
+    MEAT
+    VEGGIE
+    FRUIT
+}
+
+interface Pet {
+    id: ID!
+    name: String!
+    foodType: PetFoodType!
+}
+
+type Dog implements Pet {
+    id: ID!
+    name: String!
+    foodType: PetFoodType!
+    barkVolume: Int
+    size: Int
+}
+
+type Cat implements Pet {
+    id: ID!
+    name: String!
+    foodType: PetFoodType!
+    meowVolume: Int
+    size: Int
+}
+
+input PetFilter {
+    petType: String
+}

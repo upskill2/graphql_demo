@@ -3,6 +3,11 @@ type MobileApp {
     version: String
     platform: [String]
     author: Author!
+    appId: ID!
+    releaseDate: Date
+    homePage: Url
+    downloadedTimes: NonNegativeInt
+    category: MobileAppCategory
 }
 
 input MobileAppFilter{
@@ -10,10 +15,19 @@ input MobileAppFilter{
     version: String
     platform: String
     author: AuthorFilter
+    releasedAfter: Date
+    minDownloadedTimes: NonNegativeInt
+    category: MobileAppCategory
 }
 
 input AuthorFilter{
     name: String
+}
+
+enum MobileAppCategory{
+    GAME
+    SOCIAL
+    UTILITY
 }
 
 

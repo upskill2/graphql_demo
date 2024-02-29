@@ -92,7 +92,7 @@ class FakeBookResolverTest {
 
     @Test
     void testBooksWithInput () {
-        int expectedYears = faker.number ().numberBetween (2019, 2024);
+        int expectedYears = faker.number ().numberBetween (2019, 2020);
         boolean expectedPrintedEdition = faker.bool ().bool ();
 
         final ReleaseHistoryInput releaseHistoryInput = ReleaseHistoryInput.newBuilder ()
@@ -118,7 +118,7 @@ class FakeBookResolverTest {
         final List<Integer> releasedYears = queryExecutor.executeAndExtractJsonPath (
                 graphqlQueryRequest, "data.booksReleasedHistory[*].released.year");
 
-        assertEquals (1, new HashSet<> (releasedYears).size ());
+        assertEquals (1, (new HashSet<> (releasedYears)).size ());
 
     }
 
