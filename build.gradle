@@ -24,6 +24,7 @@ repositories {
 
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
     annotationProcessor 'org.projectlombok:lombok'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
@@ -36,7 +37,10 @@ dependencies {
     implementation 'com.netflix.graphql.dgs:graphql-dgs-extended-scalars'
     implementation 'com.netflix.graphql.dgs:graphql-dgs-spring-boot-starter'
     implementation 'com.netflix.graphql.dgs:graphql-dgs-subscriptions-websockets-autoconfigure'
+
+    runtimeOnly 'org.postgresql:postgresql'
 }
+
 
 tasks.named ('bootBuildImage') {
     builder = 'paketobuildpacks/builder-jammy-base:latest'

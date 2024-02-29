@@ -14,6 +14,17 @@ type Query {
     pets(petsFilter: PetFilter): [Pet]
     smartSearch(keyword: String): [SmartSearchResult]
     additionalRequest: String
+
+    me: User!
+    problemLatestList: [Problem!]
+    itemSearch(filter: SearchFilter): [SearchableItem]
+    problemDetail(id: ID!): Problem!
+    userCreate(user: UserCreateInput!): UserResponse!
+    userLogin(username: UserLoginInput!): UserResponse!
+    userActivation (user: UserActivationInput!): UserActivationResponse!
+    problemCreate(problem: ProblemCreateInput!): ProblemResponse!
+    createSolution(solution: SolutionCreateInput!): SolutionResponse!
+    voteSolution(vote: SolutionVoteInput!): SolutionResponse!
 }
 
 type Mutation {
@@ -24,6 +35,8 @@ type Mutation {
 
 type Subscription {
     randomStock: [Stock]
+    problemsAdded: Problem!
+    solutionVoteChanged (solutionId: ID!): Solution!
 }
 
 
