@@ -1,6 +1,7 @@
 scalar Date
 scalar Url
 scalar NonNegativeInt
+scalar DateTime
 
 union SmartSearchResult = Hello | Book
 
@@ -12,12 +13,17 @@ type Query {
     mobileApps(mobileAppFilter: MobileAppFilter): [MobileApp]
     pets(petsFilter: PetFilter): [Pet]
     smartSearch(keyword: String): [SmartSearchResult]
+    additionalRequest: String
 }
 
 type Mutation {
     createHello(helloInput: HelloInput!): Int
     replaceHelloMsg(helloInput: HelloInput!): [Hello]
     deleteHello(number: Int!): Int
+}
+
+type Subscription {
+    randomStock: [Stock]
 }
 
 
