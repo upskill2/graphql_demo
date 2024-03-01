@@ -11,7 +11,7 @@ import java.util.UUID;
 @Entity
 @Table (name = "problems")
 @Data
-public class Problem {
+public class Problems {
 
     @Id
     private UUID id;
@@ -22,10 +22,10 @@ public class Problem {
     private String title;
 
     @OneToMany (mappedBy = "problems")
-    private List<Solution> solutions;
+    private List<Solutions> solutions;
 
     @ManyToOne
     @JoinColumn (name = "created_by", nullable = false)
-    private User createdBy;
+    private Users createdBy;
 
 }

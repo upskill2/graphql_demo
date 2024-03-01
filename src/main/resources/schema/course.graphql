@@ -14,23 +14,22 @@ type Query {
     pets(petsFilter: PetFilter): [Pet]
     smartSearch(keyword: String): [SmartSearchResult]
     additionalRequest: String
-
-    me: User!
+    accountInfo: User!
     problemLatestList: [Problem!]
-    itemSearch(filter: SearchFilter): [SearchableItem]
     problemDetail(id: ID!): Problem!
-    userCreate(user: UserCreateInput!): UserResponse!
-    userLogin(username: UserLoginInput!): UserResponse!
-    userActivation (user: UserActivationInput!): UserActivationResponse!
-    problemCreate(problem: ProblemCreateInput!): ProblemResponse!
-    createSolution(solution: SolutionCreateInput!): SolutionResponse!
-    voteSolution(vote: SolutionVoteInput!): SolutionResponse!
+    searchItems(filter: SearchFilter): [SearchableItem]
 }
 
 type Mutation {
     createHello(helloInput: HelloInput!): Int
     replaceHelloMsg(helloInput: HelloInput!): [Hello]
     deleteHello(number: Int!): Int
+    createUser(user: UserCreateInput!): UserResponse!
+    userLogin(user: UserLoginInput!): UserResponse!
+    userActivation (user: UserActivationInput!): UserActivationResponse!
+    problemCreate(problem: ProblemCreateInput!): ProblemResponse!
+    createSolution(solution: SolutionCreateInput!): SolutionResponse!
+    voteSolution(vote: SolutionVoteInput!): SolutionResponse!
 }
 
 type Subscription {

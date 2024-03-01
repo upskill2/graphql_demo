@@ -1,11 +1,11 @@
 package com.course.graphql.datasource.repository;
 
-import com.course.graphql.datasource.entity.Solution;
+import com.course.graphql.datasource.entity.Solutions;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.UUID;
 
 @Repository
-public interface SolutionRepository extends CrudRepository<Solution, UUID> {
+public interface SolutionRepository extends CrudRepository<Solutions, UUID> {
 }

@@ -11,7 +11,7 @@ import java.util.UUID;
 @Entity
 @Table (name = "solutions")
 @Data
-public class Solution {
+public class Solutions {
 
     @Id
     private UUID id;
@@ -22,14 +22,14 @@ public class Solution {
     @CreationTimestamp
     @Column (name = "creation_timestamp")
     private LocalDateTime creationTime;
-    private Integer voteBadCount;
-    private Integer voteGoodCount;
+    private int voteBadCount;
+    private int voteGoodCount;
 
     @ManyToOne
     @JoinColumn (name = "created_by", nullable = false)
-    private User createdBy;
+    private Users createdBy;
 
     @ManyToOne
     @JoinColumn (name = "problem_id", nullable = false)
-    private Problem problems;
+    private Problems problems;
 }

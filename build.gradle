@@ -37,6 +37,11 @@ dependencies {
     implementation 'com.netflix.graphql.dgs:graphql-dgs-extended-scalars'
     implementation 'com.netflix.graphql.dgs:graphql-dgs-spring-boot-starter'
     implementation 'com.netflix.graphql.dgs:graphql-dgs-subscriptions-websockets-autoconfigure'
+    implementation 'org.ocpsoft.prettytime:prettytime:5.0.1.Final'
+    implementation 'org.bouncycastle:bcprov-jdk15on:1.68'
+    implementation "org.mapstruct:mapstruct:1.5.5.Final"
+    implementation 'org.projectlombok:lombok-mapstruct-binding:0.2.0'
+    annotationProcessor "org.mapstruct:mapstruct-processor:1.5.5.Final"
 
     runtimeOnly 'org.postgresql:postgresql'
 }

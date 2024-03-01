@@ -13,7 +13,7 @@ import java.util.UUID;
 @Entity
 @Table (name = "users_token")
 @Data
-public class Token {
+public class Tokens {
 
     @Id
     private UUID userId;
