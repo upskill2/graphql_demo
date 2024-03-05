@@ -1,25 +1,25 @@
 package com.course.graphql.util;
 
 
+import com.course.graphql.datasource.Category;
 import com.course.graphql.datasource.entity.Problems;
 import com.course.graphql.datasource.entity.Solutions;
 import com.course.graphql.datasource.entity.Tokens;
 import com.course.graphql.datasource.entity.Users;
-import com.course.graphql.generated.types.Problem;
-import com.course.graphql.generated.types.Solution;
-import com.course.graphql.generated.types.User;
-import com.course.graphql.generated.types.UserAuthToken;
+import com.course.graphql.generated.types.*;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;
 import org.ocpsoft.prettytime.PrettyTime;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.util.List;
 
-@Mapper
+@Mapper (componentModel = "spring")
 public interface GraphqlBeanMapper {
 
     public static final PrettyTime PRETTY_TIME = new PrettyTime ();
@@ -32,7 +32,15 @@ public interface GraphqlBeanMapper {
     @Mapping (target = "author", source = "createdBy")
     @Mapping (target = "prettyCreatedDateTime", source = "creationTimestamp", qualifiedByName = "toPrettyTime")
     @Mapping (target = "solutionCount", source = "solutions", qualifiedByName = "toSolutionCount")
+    @Mapping (target = "tags", source = "tags", qualifiedByName = "toTagsList")
     Problem toGraphqlProblem (Problems problem);
+
+    @Mapping (target = "createdDateTime", source = "creationTimestamp", qualifiedByName = "toOffsetDateTime")
+    @Mapping (target = "author", source = "createdBy")
+    @Mapping (target = "prettyCreatedDateTime", source = "creationTimestamp", qualifiedByName = "toPrettyTime")
+    @Mapping (target = "solutionCount", source = "solutions", qualifiedByName = "toSolutionCount")
+    @Mapping (target = "tags", source = "tags", qualifiedByName = "toTagsList")
+    List<Problem> toGraphqlProblemList (List<Problems> problem);
 
     @Mapping (target = "createdDateTime", source = "creationTime", qualifiedByName = "toOffsetDateTime")
     @Mapping (target = "voteAsGoodCount", source = "voteGoodCount")
@@ -59,6 +67,11 @@ public interface GraphqlBeanMapper {
     @Named ("toSolutionCount")
     public static int toSolutionCount (List<Solutions> solutionsList) {
         return solutionsList.size ();
+    }
+
+    @Named ("toTagsList")
+    public static List<String> toTagsList (String tags) {
+        return List.of (tags.split (","));
     }
 
 

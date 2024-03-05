@@ -8,23 +8,28 @@ import com.netflix.graphql.dgs.DgsComponent;
 import com.netflix.graphql.dgs.DgsMutation;
 import com.netflix.graphql.dgs.DgsSubscription;
 import com.netflix.graphql.dgs.InputArgument;
+import org.springframework.web.bind.annotation.RequestHeader;
 import reactor.core.publisher.Flux;
 
 @DgsComponent
 public class SolutionDataResolver {
 
     @DgsMutation
-    public SolutionResponse createSolution (@InputArgument (name = "solution") SolutionCreateInput solutionCreateInput) {
+    public SolutionResponse createSolution (
+            @RequestHeader (name = "authToken", required = true) String authToken,
+            @InputArgument (name = "solution") SolutionCreateInput solutionCreateInput) {
         return new SolutionResponse ();
     }
 
     @DgsMutation
-    public SolutionResponse voteSolution (@InputArgument SolutionVoteInput vote) {
+    public SolutionResponse voteSolution (
+            @RequestHeader (name = "authToken", required = true) String authToken,
+            @InputArgument SolutionVoteInput vote) {
         return new SolutionResponse ();
     }
 
     @DgsSubscription
-    public Flux<Solution> solutionVoteChanged () {
+    public Flux<Solution> solutionVoteChanged (@InputArgument String solutionId) {
         return null;
     }
 

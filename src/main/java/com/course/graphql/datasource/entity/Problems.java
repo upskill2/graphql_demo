@@ -17,11 +17,13 @@ public class Problems {
     private UUID id;
     private String content;
     @CreationTimestamp
+    @Column (name = "creation_timestamp")
     private LocalDateTime creationTimestamp;
-    private List<String> tags;
+    private String tags;
     private String title;
 
     @OneToMany (mappedBy = "problems")
+    @OrderBy("creation_timestamp desc")
     private List<Solutions> solutions;
 
     @ManyToOne

@@ -15,8 +15,7 @@ public class Solutions {
 
     @Id
     private UUID id;
-
-    @Enumerated (EnumType.ORDINAL)
+    @Enumerated (EnumType.STRING)
     private Category category;
     private String content;
     @CreationTimestamp
@@ -30,6 +29,6 @@ public class Solutions {
     private Users createdBy;
 
     @ManyToOne
-    @JoinColumn (name = "problem_id", nullable = false)
+    @JoinColumn (name = "problems_id", nullable = false)
     private Problems problems;
 }

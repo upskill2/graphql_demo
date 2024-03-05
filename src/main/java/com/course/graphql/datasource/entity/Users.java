@@ -1,5 +1,6 @@
 package com.course.graphql.datasource.entity;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
@@ -21,6 +22,7 @@ public class Users {
     private boolean active;
     private URL avatar;
     @CreationTimestamp
+    @Column (name = "creation_timestamp")
     private LocalDateTime creationTimestamp;
     private String displayName;
     private String email;
