@@ -31,7 +31,7 @@ public class ProblemsDataResolver {
 
     @DgsQuery (field = DgsConstants.QUERY.ProblemDetail)
     public Problem getProblemById (@InputArgument (name = "id") String problemId) {
-        return null;
+        return problemsService.findProblemById (problemId).map (mapper::toGraphqlProblem).orElse (null);
     }
 
     @DgsMutation
