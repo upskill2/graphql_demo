@@ -7,6 +7,7 @@ import com.course.graphql.generated.types.ProblemResponse;
 import com.course.graphql.service.query.ProblemsQueryService;
 import com.course.graphql.util.GraphqlBeanMapper;
 import com.netflix.graphql.dgs.*;
+import com.netflix.graphql.dgs.exceptions.DgsEntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.RequestHeader;
 import reactor.core.publisher.Flux;
@@ -31,7 +32,8 @@ public class ProblemsDataResolver {
 
     @DgsQuery (field = DgsConstants.QUERY.ProblemDetail)
     public Problem getProblemById (@InputArgument (name = "id") String problemId) {
-        return problemsService.findProblemById (problemId).map (mapper::toGraphqlProblem).orElse (null);
+        return problemsService.findProblemById (problemId).map (mapper::toGraphqlProblem)
+                .orElseThrow (DgsEntityNotFoundException::new);
     }
 
     @DgsMutation

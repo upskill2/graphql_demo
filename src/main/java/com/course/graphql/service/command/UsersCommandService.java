@@ -4,6 +4,7 @@ import com.course.graphql.datasource.entity.Tokens;
 import com.course.graphql.datasource.entity.Users;
 import com.course.graphql.datasource.repository.TokenRepository;
 import com.course.graphql.datasource.repository.UserRepository;
+import com.course.graphql.exception.UserAuthenticationException;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -27,7 +28,7 @@ public class UsersCommandService {
         final Optional<Users> usersQueryResult = userRepository.findUsersByUsernameIgnoreCase (username);
 
         if (usersQueryResult.isEmpty () || !isBcryptMatches (password, usersQueryResult.get ().getHashedPassword ())) {
-            throw new IllegalArgumentException ("User not found");
+            throw new UserAuthenticationException ();
         }
 
         String randomAuthToken = RandomStringUtils.randomAlphanumeric (40);

@@ -12,6 +12,7 @@ import com.netflix.graphql.dgs.DgsComponent;
 import com.netflix.graphql.dgs.DgsData;
 import com.netflix.graphql.dgs.DgsQuery;
 import com.netflix.graphql.dgs.InputArgument;
+import com.netflix.graphql.dgs.exceptions.DgsEntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.ArrayList;
@@ -45,6 +46,10 @@ public class ItemsSearchDataResolver {
 
         result.addAll (solutionsByKeyWord);
         result.addAll (problemsByKeyWord);
+
+        if(result.isEmpty ()){
+            throw new DgsEntityNotFoundException ("No items found for the given keyword");
+        }
 
         result.sort (Comparator.comparing (SearchableItem::getCreatedDateTime).reversed ());
 

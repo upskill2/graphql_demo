@@ -7,6 +7,7 @@ import com.course.graphql.service.command.UsersCommandService;
 import com.course.graphql.service.query.UsersQueryService;
 import com.course.graphql.util.GraphqlBeanMapper;
 import com.netflix.graphql.dgs.*;
+import com.netflix.graphql.dgs.exceptions.DgsEntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestHeader;
 
@@ -28,7 +29,7 @@ public class UserDataResolver {
     public User accountInfo (@RequestHeader (name = "authToken", required = true) String authToken) {
         return usersQueryService.findUserByAuthToken (authToken)
                 .map (mapper::toGraphqlUser)
-                .orElseThrow (() -> new IllegalArgumentException ("User not found"));
+                .orElseThrow (() -> new DgsEntityNotFoundException ("User not found"));
     }
 
     @DgsMutation
