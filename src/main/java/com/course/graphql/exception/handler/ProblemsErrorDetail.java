@@ -8,7 +8,6 @@ public class ProblemsErrorDetail implements ErrorDetail {
     public ErrorType getErrorType () {
         return ErrorType.UNAUTHENTICATED;
     }
-
     @Override
     public String toString () {
         return "User validation failed. Please check your credentials and try again.";

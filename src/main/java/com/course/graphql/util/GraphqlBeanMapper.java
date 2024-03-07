@@ -17,7 +17,9 @@ import org.springframework.stereotype.Component;
 import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @Mapper (componentModel = "spring")
 public interface GraphqlBeanMapper {
@@ -42,6 +44,34 @@ public interface GraphqlBeanMapper {
     @Mapping (target = "tags", source = "tags", qualifiedByName = "toTagsList")
     List<Problem> toGraphqlProblemList (List<Problems> problem);
 
+    @Mapping (target = "tags", source = "problemCreateInput", qualifiedByName = "toTagsString")
+    @Mapping (target = "id", source = "problemCreateInput", qualifiedByName = "setProblemId")
+    @Mapping (target = "solutions", source = "problemCreateInput", qualifiedByName = "toEmptySolutions")
+    @Mapping (target = "createdBy", source = "author")
+        // @Mapping(ignore = true, target = "tags")
+   public  Problems toGraphqlProblemCreateInput (ProblemCreateInput problemCreateInput, Users author);
+
+
+
+/*    public default Problems toGraphqlProblemCreateInput (ProblemCreateInput problemCreateInput, Users author){
+        return Problems.builder ()
+                .id (UUID.randomUUID ())
+                .title (problemCreateInput.getTitle ())
+                .content (problemCreateInput.getContent ())
+                .tags (String.join (",", problemCreateInput.getTags ()))
+                .createdBy (author)
+             //   .creationTimestamp (LocalDateTime.now ())
+                .solutions (new ArrayList<> ())
+                .build ();
+    };*/
+
+   default ProblemResponse toGraphqlProblemCreateResponse (Problems problems){
+      ProblemResponse problemResponse = new ProblemResponse ();
+        problemResponse.setProblem (toGraphqlProblem (problems));
+
+        return problemResponse;
+   };
+
     @Mapping (target = "createdDateTime", source = "creationTime", qualifiedByName = "toOffsetDateTime")
     @Mapping (target = "voteAsGoodCount", source = "voteGoodCount")
     @Mapping (target = "voteAsBadCount", source = "voteBadCount")
@@ -53,6 +83,7 @@ public interface GraphqlBeanMapper {
     @Mapping (target = "token", source = "authToken")
     UserAuthToken toGraphqlToken (Tokens tokens);
 
+    Users toUsers (User user);
 
     @Named ("toOffsetDateTime")
     public static OffsetDateTime toOffsetDateTime (LocalDateTime localDateTime) {
@@ -72,6 +103,21 @@ public interface GraphqlBeanMapper {
     @Named ("toTagsList")
     public static List<String> toTagsList (String tags) {
         return List.of (tags.split (","));
+    }
+
+    @Named ("toTagsString")
+    public static String toTagsString (ProblemCreateInput problemCreateInput) {
+        return String.join (",", problemCreateInput.getTags ());
+    }
+
+    @Named ("setProblemId")
+    public static UUID toUUID (ProblemCreateInput problemCreateInput) {
+        return UUID.randomUUID ();
+    }
+
+    @Named ("toEmptySolutions")
+    public static List<Solutions> toEmptySolutions (ProblemCreateInput problemCreateInput) {
+        return new ArrayList<> ();
     }
 
 

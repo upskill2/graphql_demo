@@ -12,7 +12,6 @@ import java.util.UUID;
 @Repository
 public interface SolutionRepository extends CrudRepository<Solutions, UUID> {
 
-
     @Query (nativeQuery = true,
             value = "select * from solutions where lower(content) like lower(:keyword);")
     List<Solutions> findByKeyword (@Param ("keyword") String keyword);
