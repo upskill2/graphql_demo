@@ -21,6 +21,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+import static com.course.graphql.util.HashUtil.hashBcrypt;
+
 @Mapper (componentModel = "spring")
 public interface GraphqlBeanMapper {
 
@@ -29,6 +31,19 @@ public interface GraphqlBeanMapper {
 
     @Mapping (target = "createdDateTime", source = "creationTimestamp", qualifiedByName = "toOffsetDateTime")
     User toGraphqlUser (Users user);
+
+
+    default Users toEntityUsers (UserCreateInput user) {
+        return Users.builder ()
+                .id (UUID.randomUUID ())
+                .username (user.getUsername ())
+                .active (true)
+                .avatar (user.getAvatar ())
+                .displayName (user.getDisplayName ())
+                .email (user.getEmail ())
+                .hashedPassword (hashBcrypt (user.getPassword ()))
+                .build ();
+    }
 
     @Mapping (target = "createdDateTime", source = "creationTimestamp", qualifiedByName = "toOffsetDateTime")
     @Mapping (target = "author", source = "createdBy")
@@ -72,8 +87,6 @@ public interface GraphqlBeanMapper {
         return problemResponse;
     }
 
-    ;
-
     @Mapping (target = "createdDateTime", source = "creationTime", qualifiedByName = "toOffsetDateTime")
     @Mapping (target = "voteAsGoodCount", source = "voteGoodCount")
     @Mapping (target = "voteAsBadCount", source = "voteBadCount")
@@ -85,7 +98,7 @@ public interface GraphqlBeanMapper {
         SolutionResponse solutionResponse = new SolutionResponse ();
         solutionResponse.setSolution (toGraphqlSolution (createdSolution));
         return solutionResponse;
-    };
+    }
 
     default Solutions toEntitylSolutions (SolutionCreateInput solutionCreateInput, Users author, Problems problems) {
 
@@ -103,8 +116,6 @@ public interface GraphqlBeanMapper {
     @Mapping (target = "expiryTime", source = "creationTime", qualifiedByName = "toOffsetDateTime")
     @Mapping (target = "token", source = "authToken")
     UserAuthToken toGraphqlToken (Tokens tokens);
-
-    Users toUsers (User user);
 
     @Named ("toOffsetDateTime")
     public static OffsetDateTime toOffsetDateTime (LocalDateTime localDateTime) {

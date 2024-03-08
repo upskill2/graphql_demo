@@ -84,7 +84,8 @@ public class SolutionDataResolver {
     public Flux<Solution> solutionVoteChanged (@InputArgument String solutionId) {
         Solutions solution = solutionsQueryService.findSolutionById (solutionId)
                 .orElseThrow (DgsEntityNotFoundException::new);
-        return Flux.just (mapper.toGraphqlSolution (solution));
+        return solutionsCommandService.solutionsFlux ().map (mapper::toGraphqlSolution);
+
     }
 
 }

@@ -5,6 +5,7 @@ import com.course.graphql.datasource.entity.Users;
 import com.course.graphql.datasource.repository.TokenRepository;
 import com.course.graphql.datasource.repository.UserRepository;
 import com.course.graphql.exception.UserAuthenticationException;
+import com.netflix.graphql.dgs.exceptions.DgsEntityNotFoundException;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -23,6 +24,26 @@ public class UsersCommandService {
 
     @Autowired
     private TokenRepository tokenRepository;
+
+    public Users createNewUsers (Users users) {
+        return userRepository.save (users);
+    }
+
+    public boolean activateUser (String username, boolean isActive) {
+        Optional<Users> user = userRepository.findUsersByUsernameIgnoreCase (username);
+        if (user.isPresent ()) {
+            user.get ().setActive (isActive);
+            userRepository.save (user.get ());
+            return isActive;
+        } else {
+            throw new DgsEntityNotFoundException ("User not found");
+        }
+    }
+
+    public Optional<Users> activateUsers (String username, boolean isActive) {
+        userRepository.activateUser (username, isActive);
+        return userRepository.findUsersByUsernameIgnoreCase (username);
+    }
 
     public Tokens login (String username, String password) {
         final Optional<Users> usersQueryResult = userRepository.findUsersByUsernameIgnoreCase (username);

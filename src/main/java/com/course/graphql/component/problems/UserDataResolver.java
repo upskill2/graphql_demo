@@ -25,16 +25,23 @@ public class UserDataResolver {
     @Autowired
     private GraphqlBeanMapper mapper;
 
+    @DgsMutation
+    public UserResponse createUser (@InputArgument (name = "user") UserCreateInput userCreateInput) {
+
+        final Users newUser = usersCommandService.createNewUsers (mapper.toEntityUsers (userCreateInput));
+        final Tokens generatedToken = usersCommandService.login (newUser.getUsername (), userCreateInput.getPassword ());
+
+        return UserResponse.newBuilder ()
+                .user (mapper.toGraphqlUser (newUser))
+                .token (mapper.toGraphqlToken (generatedToken))
+                .build ();
+    }
+
     @DgsQuery //(parentType = DgsConstants.QUERY_TYPE, field = DgsConstants.QUERY.Login)
     public User accountInfo (@RequestHeader (name = "authToken", required = true) String authToken) {
         return usersQueryService.findUserByAuthToken (authToken)
                 .map (mapper::toGraphqlUser)
                 .orElseThrow (() -> new DgsEntityNotFoundException ("User not found"));
-    }
-
-    @DgsMutation
-    public UserResponse createUser (@InputArgument (name = "user") UserCreateInput userCreateInput) {
-        return new UserResponse ();
     }
 
     @DgsMutation
@@ -48,7 +55,13 @@ public class UserDataResolver {
 
     @DgsMutation
     public UserActivationResponse userActivation (@InputArgument (name = "user") UserActivationInput userActivationInput) {
-        return new UserActivationResponse ();
+
+        final boolean activated = usersCommandService.activateUser (userActivationInput.getUsername (), userActivationInput.getActive ());
+
+        return UserActivationResponse.newBuilder ()
+                .isActive (activated)
+                .build ();
+
 
     }
 

@@ -57,7 +57,7 @@ public class ProblemsDataResolver {
 
     @DgsSubscription (field = DgsConstants.SUBSCRIPTION.ProblemsAdded)
     public Flux<Problem> subscribeToProblemsAdded () {
-        return null;
+        return problemsCommandService.problemsFlux ().map (mapper::toGraphqlProblem);
     }
 
 }

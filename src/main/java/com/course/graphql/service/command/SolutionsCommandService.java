@@ -4,6 +4,8 @@ import com.course.graphql.datasource.entity.Solutions;
 import com.course.graphql.datasource.repository.SolutionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Sinks;
 
 import java.util.Optional;
 import java.util.UUID;
@@ -11,6 +13,7 @@ import java.util.UUID;
 @Service
 public class SolutionsCommandService {
 
+    private Sinks.Many<Solutions> solutionsSink = Sinks.many ().multicast ().onBackpressureBuffer ();
     @Autowired
     private SolutionRepository solutionRepository;
 
@@ -19,12 +22,23 @@ public class SolutionsCommandService {
     }
 
     public Optional<Solutions> addVoteGoodCount (final UUID solutionId) {
-      solutionRepository.addVoteGoodCount (solutionId);
-        return solutionRepository.findById (solutionId);
+        solutionRepository.addVoteGoodCount (solutionId);
+        final Optional<Solutions> newSolutionId = solutionRepository.findById (solutionId);
+
+        newSolutionId.ifPresent (solutionsSink::tryEmitNext);
+
+        return newSolutionId;
     }
 
     public Optional<Solutions> addVoteBadCount (final UUID solutionId) {
         solutionRepository.addVoteBadCount (solutionId);
-        return solutionRepository.findById (solutionId);
+
+        final Optional<Solutions> newSolutionId = solutionRepository.findById (solutionId);
+        newSolutionId.ifPresent (solutionsSink::tryEmitNext);
+        return newSolutionId;
+    }
+
+    public Flux<Solutions> solutionsFlux () {
+        return solutionsSink.asFlux ();
     }
 }
