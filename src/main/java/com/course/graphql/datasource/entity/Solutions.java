@@ -2,7 +2,7 @@ package com.course.graphql.datasource.entity;
 
 import com.course.graphql.datasource.Category;
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
@@ -10,7 +10,11 @@ import java.util.UUID;
 
 @Entity
 @Table (name = "solutions")
-@Data
+@Getter
+@Setter
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class Solutions {
 
     @Id

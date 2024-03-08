@@ -48,8 +48,8 @@ public interface GraphqlBeanMapper {
     @Mapping (target = "id", source = "problemCreateInput", qualifiedByName = "setProblemId")
     @Mapping (target = "solutions", source = "problemCreateInput", qualifiedByName = "toEmptySolutions")
     @Mapping (target = "createdBy", source = "author")
-        // @Mapping(ignore = true, target = "tags")
-   public  Problems toGraphqlProblemCreateInput (ProblemCreateInput problemCreateInput, Users author);
+    // @Mapping(ignore = true, target = "tags")
+    public Problems toGraphqlProblemCreateInput (ProblemCreateInput problemCreateInput, Users author);
 
 
 
@@ -65,12 +65,14 @@ public interface GraphqlBeanMapper {
                 .build ();
     };*/
 
-   default ProblemResponse toGraphqlProblemCreateResponse (Problems problems){
-      ProblemResponse problemResponse = new ProblemResponse ();
+    default ProblemResponse toGraphqlProblemCreateResponse (Problems problems) {
+        ProblemResponse problemResponse = new ProblemResponse ();
         problemResponse.setProblem (toGraphqlProblem (problems));
 
         return problemResponse;
-   };
+    }
+
+    ;
 
     @Mapping (target = "createdDateTime", source = "creationTime", qualifiedByName = "toOffsetDateTime")
     @Mapping (target = "voteAsGoodCount", source = "voteGoodCount")
@@ -78,6 +80,25 @@ public interface GraphqlBeanMapper {
     @Mapping (target = "author", source = "createdBy")
     @Mapping (target = "prettyCreatedDateTime", source = "creationTime", qualifiedByName = "toPrettyTime")
     Solution toGraphqlSolution (Solutions solution);
+
+    default SolutionResponse toSolutionResponse (Solutions createdSolution) {
+        SolutionResponse solutionResponse = new SolutionResponse ();
+        solutionResponse.setSolution (toGraphqlSolution (createdSolution));
+        return solutionResponse;
+    };
+
+    default Solutions toEntitylSolutions (SolutionCreateInput solutionCreateInput, Users author, Problems problems) {
+
+        return Solutions.builder ()
+                .id (UUID.randomUUID ())
+                .category (Category.valueOf (solutionCreateInput.getCategory ().name ()))
+                .content (solutionCreateInput.getContent ())
+                .createdBy (author)
+                .voteBadCount (0)
+                .voteGoodCount (0)
+                .problems (problems)
+                .build ();
+    }
 
     @Mapping (target = "expiryTime", source = "creationTime", qualifiedByName = "toOffsetDateTime")
     @Mapping (target = "token", source = "authToken")
@@ -119,6 +140,5 @@ public interface GraphqlBeanMapper {
     public static List<Solutions> toEmptySolutions (ProblemCreateInput problemCreateInput) {
         return new ArrayList<> ();
     }
-
 
 }

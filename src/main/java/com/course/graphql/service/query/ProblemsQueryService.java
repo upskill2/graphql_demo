@@ -21,7 +21,8 @@ public class ProblemsQueryService {
     }
 
     public Optional<Problems> findProblemById (final String problemId) {
-        return problemRepository.findById (UUID.fromString (problemId));
+        final UUID id = UUID.fromString (problemId);
+         return problemRepository.findById (id);
     }
 
     public List<Problems> findProblemsByKeyword (final String keyword) {
