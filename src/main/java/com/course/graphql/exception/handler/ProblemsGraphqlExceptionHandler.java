@@ -1,5 +1,6 @@
 package com.course.graphql.exception.handler;
 
+import com.course.graphql.exception.ProblemsPermissionsException;
 import com.course.graphql.exception.UserAuthenticationException;
 import com.netflix.graphql.dgs.exceptions.DefaultDataFetcherExceptionHandler;
 import com.netflix.graphql.types.errors.ErrorType;
@@ -38,6 +39,19 @@ public class ProblemsGraphqlExceptionHandler implements DataFetcherExceptionHand
                     .build ();
 
             return CompletableFuture.completedFuture (result);
+        } else if (exception instanceof ProblemsPermissionsException) {
+            TypedGraphQLError error = TypedGraphQLError.newBuilder ()
+                    .message (exception.getMessage ())
+                    .path (handlerParameters.getPath ())
+                    .errorDetail (new PermissionsErrorDetail ())
+                    .build ();
+
+            final DataFetcherExceptionHandlerResult result = DataFetcherExceptionHandlerResult.newResult ()
+                    .error (error)
+                    .build ();
+
+            return CompletableFuture.completedFuture (result);
+
         }
         return defaultDataFetcherExceptionHandler.handleException (handlerParameters);
     }

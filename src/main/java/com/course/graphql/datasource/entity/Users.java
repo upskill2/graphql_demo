@@ -1,9 +1,7 @@
 package com.course.graphql.datasource.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import com.course.graphql.datasource.UserRole;
+import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 
@@ -31,5 +29,6 @@ public class Users {
     private String displayName;
     private String email;
     private String hashedPassword;
-
+    @Enumerated (EnumType.STRING)
+    private UserRole userRole;
 }

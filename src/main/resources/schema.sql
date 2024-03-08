@@ -60,4 +60,5 @@ CREATE TABLE users_token (
 	PRIMARY KEY (user_id)
 );
 
--- data samples
+alter table users add column user_role varchar(20);
+

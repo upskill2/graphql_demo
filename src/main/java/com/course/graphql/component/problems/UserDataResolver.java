@@ -1,7 +1,9 @@
 package com.course.graphql.component.problems;
 
+import com.course.graphql.datasource.UserRole;
 import com.course.graphql.datasource.entity.Tokens;
 import com.course.graphql.datasource.entity.Users;
+import com.course.graphql.exception.UserAuthenticationException;
 import com.course.graphql.generated.types.*;
 import com.course.graphql.service.command.UsersCommandService;
 import com.course.graphql.service.query.UsersQueryService;
@@ -26,15 +28,27 @@ public class UserDataResolver {
     private GraphqlBeanMapper mapper;
 
     @DgsMutation
-    public UserResponse createUser (@InputArgument (name = "user") UserCreateInput userCreateInput) {
+    public UserResponse createUser (
+            @RequestHeader (name = "authToken", required = false) String authToken,
+            @InputArgument (name = "user") UserCreateInput userCreateInput) {
 
-        final Users newUser = usersCommandService.createNewUsers (mapper.toEntityUsers (userCreateInput));
-        final Tokens generatedToken = usersCommandService.login (newUser.getUsername (), userCreateInput.getPassword ());
+        if (authToken == null || authToken.isEmpty ()) {
+            authToken = "";
+        }
 
-        return UserResponse.newBuilder ()
-                .user (mapper.toGraphqlUser (newUser))
-                .token (mapper.toGraphqlToken (generatedToken))
-                .build ();
+        Users adminUser = usersQueryService.findUserByAuthToken (authToken)
+                .orElseThrow (() -> new DgsEntityNotFoundException ("User not found"));
+
+        if (adminUser.getUserRole () == UserRole.ROLE_ADMIN) {
+            final Users newUser = usersCommandService.createNewUsers (mapper.toEntityUsers (userCreateInput));
+            final Tokens generatedToken = usersCommandService.login (newUser.getUsername (), userCreateInput.getPassword ());
+
+            return UserResponse.newBuilder ()
+                    .user (mapper.toGraphqlUser (newUser))
+                    .token (mapper.toGraphqlToken (generatedToken))
+                    .build ();
+        }
+        throw new UserAuthenticationException ("User not authorized to perform this action");
     }
 
     @DgsQuery //(parentType = DgsConstants.QUERY_TYPE, field = DgsConstants.QUERY.Login)
@@ -54,15 +68,24 @@ public class UserDataResolver {
     }
 
     @DgsMutation
-    public UserActivationResponse userActivation (@InputArgument (name = "user") UserActivationInput userActivationInput) {
+    public UserActivationResponse userActivation (
+            @RequestHeader (name = "authToken", required = false) String authToken,
+            @InputArgument (name = "user") UserActivationInput userActivationInput) {
 
-        final boolean activated = usersCommandService.activateUser (userActivationInput.getUsername (), userActivationInput.getActive ());
+        if (authToken == null || authToken.isEmpty ()) {
+            authToken = "";
+        }
 
-        return UserActivationResponse.newBuilder ()
-                .isActive (activated)
-                .build ();
+        Users user = usersQueryService.findUserByAuthToken (authToken)
+                .orElseThrow (() -> new DgsEntityNotFoundException ("User not found"));
 
-
+        if (user.getUserRole () == UserRole.ROLE_ADMIN) {
+            final boolean activated = usersCommandService.activateUser (userActivationInput.getUsername (), userActivationInput.getActive ());
+            return UserActivationResponse.newBuilder ()
+                    .isActive (activated)
+                    .build ();
+        }
+        throw new UserAuthenticationException ("User not authorized to perform this action");
     }
 
 }

@@ -370,3 +370,6 @@ insert into solutions (id, creation_timestamp, content, category, created_by, vo
 insert into solutions (id, creation_timestamp, content, category, created_by, vote_good_count, vote_bad_count, problems_id) values ('aa359255-6267-4494-ab1f-ee2255293a40', '2023-04-10T21:49:53Z', 'Plain Radiography of Hepatic Artery using Low Osmolar Contrast', 'REFERENCE', '4c94f5f1-34c9-4d59-b558-06b83563713b', 4, 0, 'e1199a0e-1c7f-49a9-a8f0-521922133413');
 insert into solutions (id, creation_timestamp, content, category, created_by, vote_good_count, vote_bad_count, problems_id) values ('6a148d58-2d20-405d-b559-b8b983396226', '2023-03-13T23:18:55Z', 'Bypass Jejunum to Transverse Colon, Open Approach', 'REFERENCE', '68e62c31-fcd9-4d00-8859-1f34c629ccec', 6, 0, '392a8d50-c44a-4f4c-ad15-81fc77c849e8');
 insert into solutions (id, creation_timestamp, content, category, created_by, vote_good_count, vote_bad_count, problems_id) values ('7e8abc8c-47eb-4b1a-8091-804f5bf217a9', '2023-04-24T14:54:25Z', 'Restriction of Bladder Neck, Via Natural or Artificial Opening Endoscopic', 'EXPLANATION', '6dd5008f-039d-4318-9c47-36742447e078', 3, 0, 'f778b158-c4eb-4b37-a57c-9c6576392318');
+
+update users set user_role = 'ROLE_MEMBER';
+update users set user_role = 'ROLE_ADMIN' where username = 'jbrameg';
