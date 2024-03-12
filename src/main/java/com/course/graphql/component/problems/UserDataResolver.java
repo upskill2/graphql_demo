@@ -11,9 +11,8 @@ import com.course.graphql.util.GraphqlBeanMapper;
 import com.netflix.graphql.dgs.*;
 import com.netflix.graphql.dgs.exceptions.DgsEntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.RequestHeader;
-
-import java.util.Optional;
 
 @DgsComponent
 public class UserDataResolver {
@@ -28,6 +27,7 @@ public class UserDataResolver {
     private GraphqlBeanMapper mapper;
 
     @DgsMutation
+    @Secured ("ROLE_ADMIN")
     public UserResponse createUser (
             @RequestHeader (name = "authToken", required = false) String authToken,
             @InputArgument (name = "user") UserCreateInput userCreateInput) {
@@ -39,17 +39,20 @@ public class UserDataResolver {
         Users adminUser = usersQueryService.findUserByAuthToken (authToken)
                 .orElseThrow (() -> new DgsEntityNotFoundException ("User not found"));
 
-        if (adminUser.getUserRole () == UserRole.ROLE_ADMIN) {
-            final Users newUser = usersCommandService.createNewUsers (mapper.toEntityUsers (userCreateInput));
-            final Tokens generatedToken = usersCommandService.login (newUser.getUsername (), userCreateInput.getPassword ());
+        //    if (adminUser.getUserRole () == UserRole.ROLE_ADMIN) {
+        final Users newUser = usersCommandService.createNewUsers (mapper.toEntityUsers (userCreateInput));
+        final Tokens generatedToken = usersCommandService.login (newUser.getUsername (), userCreateInput.getPassword ());
 
-            return UserResponse.newBuilder ()
-                    .user (mapper.toGraphqlUser (newUser))
-                    .token (mapper.toGraphqlToken (generatedToken))
-                    .build ();
-        }
-        throw new UserAuthenticationException ("User not authorized to perform this action");
+        return UserResponse.newBuilder ()
+                .user (mapper.toGraphqlUser (newUser))
+                .token (mapper.toGraphqlToken (generatedToken))
+                .build ();
+        //      }
+        //       else {
+        //          throw new UserAuthenticationException ("User not authorized to perform this action");
+        //     }
     }
+
 
     @DgsQuery //(parentType = DgsConstants.QUERY_TYPE, field = DgsConstants.QUERY.Login)
     public User accountInfo (@RequestHeader (name = "authToken", required = true) String authToken) {
