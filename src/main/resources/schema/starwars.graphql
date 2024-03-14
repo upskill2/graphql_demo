@@ -1,0 +1,62 @@
+type FilmsConnection{
+    after: String
+    first: Int
+    before: String
+    last: Int
+}
+type Film{
+    id: ID
+    filmID: ID
+}
+type PeopleConnection{
+    after: String
+    first: Int
+    before: String
+    last: Int
+}
+type Person{
+    id: ID
+    personID: ID
+}
+type PlanetsConnection{
+    after: String
+    first: Int
+    before: String
+    last: Int
+}
+type Planet{
+    id: ID
+    planetID: ID
+}
+type SpeciesConnection {
+    after: String
+    first: Int
+    before: String
+    last: Int
+}
+type Species{
+    id: ID
+    speciesID: ID
+}
+type StarshipsConnection{
+    after: String
+    first: Int
+    before: String
+    last: Int
+}
+type Starship{
+    id: ID
+    starshipID: ID
+}
+type VehiclesConnection{
+    after: String
+    first: Int
+    before: String
+    last: Int
+}
+type Vehicle{
+    id: ID
+    vehicleID: ID
+}
+type Node{id: ID!
+}
