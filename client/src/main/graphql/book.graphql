@@ -7,26 +7,8 @@ query books {
         }
         released {
             year
-            printedEdition
-            releaseCountry
         }
     }
 }
 
 
-query booksByReleased($releaseYear: Int = 2020, $releasePrintedEdition: Boolean) {
-    booksByReleased(
-        releasedInput: {
-            year: $releaseYear
-            printedEdition: $releasePrintedEdition
-        }
-    ) {
-        title
-        released {
-            year
-        }
-        author {
-            name
-        }
-    }
-}
