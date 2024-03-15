@@ -1,5 +1,0 @@
-scalar Date
-scalar Url
-scalar NonNegativeInt
-scalar DateTime
-scalar PositiveFloat

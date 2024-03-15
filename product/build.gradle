@@ -52,13 +52,19 @@ tasks.named('test') {
 }
 
 generateJava {
-	packageName = 'com.course.graphql.generated'
+	packageName = 'com.course.product.generated'
 	generateClient = true
 	typeMapping = [
 			"Date"          : "java.time.LocalDate",
 			"NonNegativeInt": "java.lang.Integer",
+			"NonPositiveInt": "java.lang.Integer",
+			"PositiveInt": "java.lang.Integer",
+			"NegativeInt": "java.lang.Integer",
+			"NonPositiveFloat": "java.lang.Double",
+			"NonNegativeFloat": "java.lang.Double",
 			"Url"           : "java.net.URL",
 			"DateTime"      : "java.time.OffsetDateTime",
-			"PositiveFloat" : "java.lang.Float",
+			"PositiveFloat" : "java.lang.Double",
+			"NegativeFloat" : "java.lang.Double"
 	]
 }
