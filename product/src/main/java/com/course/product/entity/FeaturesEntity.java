@@ -13,7 +13,8 @@ import java.util.UUID;
 public class FeaturesEntity {
     @Id
     @Column (name = "uuid")
-    private UUID id;
+    @GeneratedValue
+    private UUID uuid;
     @ManyToOne
     @JoinColumn (name = "model_uuid", nullable = false)
     private ModelsEntity modelsEntity;

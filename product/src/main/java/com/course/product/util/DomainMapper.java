@@ -11,15 +11,31 @@ import org.mapstruct.Mapper;
 @Mapper (componentModel = "spring")
 public interface DomainMapper {
 
-    Manufacturer toManufacturer (ManufacturersEntity manufacturersEntity);
+    default Manufacturer toManufacturer (ManufacturersEntity manufacturersEntity) {
+        return Manufacturer.newBuilder ()
+                .name (manufacturersEntity.getName ())
+                .uuid (manufacturersEntity.getUuid ().toString ())
+                .originCountry (manufacturersEntity.getOriginCountry ())
+                .series (manufacturersEntity.getSeries ().stream ().map (this::manufacturerToSeries).toList ())
+                .description (manufacturersEntity.getDescription ())
+                .build ();
+    }
 
     default Series toSeries (SeriesEntity seriesEntity) {
         return Series.newBuilder ()
                 .name (seriesEntity.getName ())
-                .uuid (seriesEntity.getId ().toString ())
+                .uuid (seriesEntity.getUuid ().toString ())
                 .manufacturer (toManufacturer (seriesEntity.getManufacturerId ()))
+                .build ();
+    }
+
+    default Series manufacturerToSeries (SeriesEntity seriesEntity) {
+        return Series.newBuilder ()
+                .name (seriesEntity.getName ())
+                .uuid (seriesEntity.getUuid ().toString ())
                 .build ();
 
     }
+
     Model toModels (ModelsEntity modelsEntity);
 }

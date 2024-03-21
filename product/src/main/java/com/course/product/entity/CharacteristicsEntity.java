@@ -13,7 +13,8 @@ import java.util.UUID;
 public class CharacteristicsEntity {
     @Id
     @Column (name = "uuid")
-    private UUID id;
+    @GeneratedValue
+    private UUID uuid;
     @ManyToOne
     @JoinColumn (name = "series_uuid", nullable = false)
     private SeriesEntity seriesEntity;

@@ -14,7 +14,8 @@ public class SeriesEntity {
 
     @Id
     @Column (name = "uuid")
-    private UUID id;
+    @GeneratedValue
+    private UUID uuid;
     @ManyToOne
     @JoinColumn (name = "manufacturer_uuid", nullable = false)
     private ManufacturersEntity manufacturerId;

@@ -29,7 +29,7 @@ public class ModelService {
                 () -> new DgsEntityNotFoundException ("Manufacturer not found"));
         List<UUID> seriesUUIDList = seriesRepository.findSeriesByManufacturerUuid (manufacturer.getUuid ())
                 .stream ()
-                .map (SeriesEntity::getId)
+                .map (SeriesEntity::getUuid)
                 .toList ();
 
         return modelsRepository.findModelsBySeriesUUID (seriesUUIDList);
@@ -43,7 +43,7 @@ public class ModelService {
                 .toList ();
         List<UUID> seriesUUIDList = seriesRepository.findSeriesByManufacturerUuid (manufacturerUUIDList)
                 .stream ()
-                .map (SeriesEntity::getId)
+                .map (SeriesEntity::getUuid)
                 .toList ();
 
         return modelsRepository.findModelsBySeriesUUID (seriesUUIDList);
