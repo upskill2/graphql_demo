@@ -1,0 +1,17 @@
+type Query {
+    findManufacturerByName(manufacturerInput: ManufacturerInput!): [Manufacturer]
+    findManufacturerByCountry(manufacturerInput: ManufacturerInput!): [Manufacturer]
+
+    findSeriesByName(seriesInput: SeriesInput!): [Series]
+    findSeriesByManufacturer(seriesInput: SeriesInput!): [Series]
+    findSeriesByManufacturerCountry(seriesInput: SeriesInput!): [Series]
+
+    findModelByManufacturerName(manufacturerInput: ManufacturerInput!): [Model]
+    findModelByCountry(manufacturerInput: ManufacturerInput!): [Model]
+    findModelBySeriesName(modelInput: ModelInput!): [Model]
+    findModelByName(modelInput: ModelInput!): [Model]
+    findModelByExteriorColor(modelInput: ModelInput): [Model]
+    findModelByTransmission(modelInput: ModelInput): [Model]
+    findModelByAvailability(modelInput: ModelInput): [Model]
+    findModelByPrice(modelInput: ModelInput): [Model]
+}

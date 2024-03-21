@@ -17,6 +17,7 @@ input ModelInput {
     transmission    : Transmission
     exteriorColors  : [String!]
     sorts           : [SortInput!]
+    price           : NumericComparisonInput
 }
 
 input NumericComparisonInput {

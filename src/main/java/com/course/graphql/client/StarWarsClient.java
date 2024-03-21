@@ -85,7 +85,7 @@ public class StarWarsClient {
                     name
                     model
                     starshipClass
-                    manufacturers
+                    manufacturersEntity
                     costInCredits
                     length
                     crew

@@ -41,7 +41,9 @@ dependencies {
 	implementation 'org.bouncycastle:bcprov-jdk15on:1.68'
 	implementation "org.mapstruct:mapstruct:1.5.5.Final"
 	implementation 'org.projectlombok:lombok-mapstruct-binding:0.2.0'
-	annotationProcessor "org.mapstruct:mapstruct-processor:1.5.5.Final"
+	annotationProcessor 'org.mapstruct:mapstruct-processor:1.5.5.Final'
+	implementation 'org.flywaydb:flyway-core'
+
 	//implementation 'org.springframework.boot:spring-boot-starter-security'
 
 	runtimeOnly 'org.postgresql:postgresql'

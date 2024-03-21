@@ -40,7 +40,7 @@ public class StarWarsGraphqlClient {
               starship(id: "c3RhcnNoaXBzOjU=") {
                 name
                 model
-                manufacturers
+                manufacturersEntity
               }
             }
             query oneFilm ($filmId: ID!) {
