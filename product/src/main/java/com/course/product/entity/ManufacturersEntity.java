@@ -3,6 +3,8 @@ package com.course.product.entity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 
 import java.util.List;
 import java.util.UUID;
@@ -20,5 +22,6 @@ public class ManufacturersEntity {
     private String description;
 
     @OneToMany (fetch = FetchType.LAZY, mappedBy = "manufacturerId")
+    @Fetch (FetchMode.SUBSELECT)
     private List<SeriesEntity> series;
 }

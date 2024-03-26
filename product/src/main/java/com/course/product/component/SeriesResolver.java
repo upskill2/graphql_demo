@@ -10,6 +10,7 @@ import com.netflix.graphql.dgs.InputArgument;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
+import java.util.Optional;
 
 @DgsComponent
 public class SeriesResolver {
@@ -19,6 +20,14 @@ public class SeriesResolver {
 
     @Autowired
     private DomainMapper domainMapper;
+
+    @DgsQuery
+    public List<Series> seriesWithSpecification (Optional<SeriesInput> seriesInput) {
+        return seriesService.findSeries (seriesInput)
+                .stream ()
+                .map (domainMapper::toSeries)
+                .toList ();
+    }
 
     @DgsQuery
     public List<Series> findSeriesByName (@InputArgument SeriesInput seriesInput) {

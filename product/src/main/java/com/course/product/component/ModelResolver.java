@@ -8,9 +8,11 @@ import com.course.product.service.ModelService;
 import com.course.product.util.DomainMapper;
 import com.netflix.graphql.dgs.DgsComponent;
 import com.netflix.graphql.dgs.DgsQuery;
+import com.netflix.graphql.dgs.InputArgument;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -23,6 +25,14 @@ public class ModelResolver {
 
     @Autowired
     private DomainMapper domainMapper;
+
+    @DgsQuery
+    public List<Model> modelsWithSpecification (@InputArgument Optional<ModelInput> modelInput) {
+        return modelService.findModels (modelInput)
+                .stream ()
+                .map (domainMapper::toModels)
+                .toList ();
+    }
 
     @DgsQuery
     Set<Model> findModelByManufacturerName (ManufacturerInput manufacturerInput) {

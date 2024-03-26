@@ -15,7 +15,7 @@ input ModelInput {
     name            : String
     isAvailable     : Boolean
     transmission    : Transmission
-    exteriorColors  : [String!]
+    exteriorColors  : String
     sorts           : [SortInput!]
     price           : NumericComparisonInput
 }

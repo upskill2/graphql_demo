@@ -4,7 +4,10 @@ import com.course.product.domain.Enums.*;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 
+import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -40,8 +43,12 @@ public class ModelsEntity {
     private int doors;
     private int airbags;
     private boolean isAvailable;
-    @ManyToOne
+    @OneToOne
     @JoinColumn (name = "engine_uuid", nullable = false)
     private EnginesEntity enginesEntity;
+
+    @OneToMany (mappedBy = "modelsEntity")
+    @Fetch (FetchMode.SUBSELECT)
+    private List<FeaturesEntity> featuresEntity;
 
 }

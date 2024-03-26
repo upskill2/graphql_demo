@@ -2,6 +2,7 @@ package com.course.product.repository;
 
 import com.course.product.entity.SeriesEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
@@ -10,7 +11,7 @@ import java.util.List;
 import java.util.UUID;
 
 @Repository
-public interface SeriesRepository extends JpaRepository<SeriesEntity, UUID> {
+public interface SeriesRepository extends JpaRepository<SeriesEntity, UUID>, JpaSpecificationExecutor<SeriesEntity> {
     //  @Query (nativeQuery = true, value = "SELECT * FROM series WHERE lower(name) LIKE lower(:name)")
     @Query (nativeQuery = true, value = "SELECT * FROM series WHERE lower(name) LIKE lower(:name)")
     List<SeriesEntity> findSeriesByNameIgnoreCase (@Param ("name") String name);

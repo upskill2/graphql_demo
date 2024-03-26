@@ -20,4 +20,10 @@ public class CharacteristicsEntity {
     private SeriesEntity seriesEntity;
     private String name;
 
+    @Override
+    public String toString () {
+        return "CharacteristicsEntity{" +
+                "name='" + name + '\'' +
+                '}';
+    }
 }

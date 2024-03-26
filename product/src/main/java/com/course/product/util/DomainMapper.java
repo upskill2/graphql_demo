@@ -1,5 +1,6 @@
 package com.course.product.util;
 
+import com.course.product.entity.CharacteristicsEntity;
 import com.course.product.entity.ManufacturersEntity;
 import com.course.product.entity.ModelsEntity;
 import com.course.product.entity.SeriesEntity;
@@ -26,6 +27,9 @@ public interface DomainMapper {
                 .name (seriesEntity.getName ())
                 .uuid (seriesEntity.getUuid ().toString ())
                 .manufacturer (toManufacturer (seriesEntity.getManufacturerId ()))
+                .models (seriesEntity.getModels ().stream ().map (this::toModels).toList ())
+                .characteristics (seriesEntity.getCharacteristics ()
+               .stream ().map (CharacteristicsEntity::getName).toList ())
                 .build ();
     }
 
@@ -33,9 +37,21 @@ public interface DomainMapper {
         return Series.newBuilder ()
                 .name (seriesEntity.getName ())
                 .uuid (seriesEntity.getUuid ().toString ())
+                .models (seriesEntity.getModels ().stream ().map (this::toModels).toList ())
                 .build ();
 
     }
 
-    Model toModels (ModelsEntity modelsEntity);
+   default Model toModels (ModelsEntity modelsEntity){
+
+        return Model.newBuilder ()
+                .name (modelsEntity.getName ())
+                .uuid (modelsEntity.getUuid ().toString ())
+                .airbags (modelsEntity.getAirbags ())
+                .releaseYear (modelsEntity.getReleaseYear ())
+                .onTheRoadPrice ((int) modelsEntity.getOnTheRoadPrice ())
+                .exteriorColor (modelsEntity.getExteriorColor ())
+                .interiorColor (modelsEntity.getInteriorColor ())
+                .build ();
+   }
 }

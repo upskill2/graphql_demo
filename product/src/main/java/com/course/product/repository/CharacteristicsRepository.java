@@ -1,11 +1,13 @@
 package com.course.product.repository;
 
 import com.course.product.entity.CharacteristicsEntity;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.UUID;
 
 @Repository
-public interface CharacteristicsRepository extends CrudRepository<CharacteristicsEntity, UUID>{
+public interface CharacteristicsRepository extends CrudRepository<CharacteristicsEntity, UUID>,
+        JpaSpecificationExecutor<CharacteristicsEntity> {
 }

@@ -21,4 +21,7 @@ public class EnginesEntity {
     private int torque;
     @Column (name = "capacity_cc")
     private int capacityCc;
+
+    @OneToOne (mappedBy = "enginesEntity")
+    private ModelsEntity modelsEntity;
 }
