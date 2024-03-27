@@ -1,4 +1,4 @@
-type Manufacturer {
+type Manufacturer @connection {
     uuid            : String!
     name            : String!
     originCountry   : String!

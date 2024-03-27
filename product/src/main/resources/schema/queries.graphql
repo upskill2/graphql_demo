@@ -2,11 +2,25 @@ type Query {
     findManufacturerByName(manufacturerInput: ManufacturerInput!): [Manufacturer]
     findManufacturerByCountry(manufacturerInput: ManufacturerInput!): [Manufacturer]
     manufacturersWithSpecification(manufacturerInput: ManufacturerInput!):[Manufacturer]
+    manufacturersPagination(
+        manufacturerInput: ManufacturerInput,
+        first: Int,
+        last: Int,
+        after: String,
+        before: String
+    ): ManufacturerConnection
 
     findSeriesByName(seriesInput: SeriesInput!): [Series]
     findSeriesByManufacturer(seriesInput: SeriesInput!): [Series]
     findSeriesByManufacturerCountry(seriesInput: SeriesInput!): [Series]
     seriesWithSpecification(seriesInput: SeriesInput!): [Series]
+    seriesPagination(
+        seriesInput: SeriesInput,
+        first: Int,
+        last: Int,
+        after: String,
+        before: String
+    ): SeriesConnection
 
     findModelByManufacturerName(manufacturerInput: ManufacturerInput!): [Model]
     findModelByCountry(manufacturerInput: ManufacturerInput!): [Model]

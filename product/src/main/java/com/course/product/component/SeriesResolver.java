@@ -7,6 +7,9 @@ import com.course.product.util.DomainMapper;
 import com.netflix.graphql.dgs.DgsComponent;
 import com.netflix.graphql.dgs.DgsQuery;
 import com.netflix.graphql.dgs.InputArgument;
+import graphql.relay.Connection;
+import graphql.relay.SimpleListConnection;
+import graphql.schema.DataFetchingEnvironment;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
@@ -20,6 +23,24 @@ public class SeriesResolver {
 
     @Autowired
     private DomainMapper domainMapper;
+
+    @DgsQuery
+    public Connection<Series> seriesPagination (
+            @InputArgument SeriesInput seriesInput,
+            DataFetchingEnvironment dataFetchingEnvironment,
+            @InputArgument Optional<Integer> first,
+            @InputArgument Optional<Integer> last,
+            @InputArgument Optional<String> after,
+            @InputArgument Optional<String> before) {
+
+        List<Series> allSeries = seriesService.findSeries (Optional.of (seriesInput))
+                .stream ()
+                .map (domainMapper::toSeries)
+                .toList ();
+
+        return new SimpleListConnection<> (allSeries).get (dataFetchingEnvironment);
+
+    }
 
     @DgsQuery
     public List<Series> seriesWithSpecification (Optional<SeriesInput> seriesInput) {

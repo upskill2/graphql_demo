@@ -1,4 +1,4 @@
-type Series {
+type Series @connection {
     uuid            : String!
     name            : String!
     characteristics : [String!]

@@ -7,6 +7,9 @@ import com.course.product.util.DomainMapper;
 import com.netflix.graphql.dgs.DgsComponent;
 import com.netflix.graphql.dgs.DgsQuery;
 import com.netflix.graphql.dgs.InputArgument;
+import graphql.relay.Connection;
+import graphql.relay.SimpleListConnection;
+import graphql.schema.DataFetchingEnvironment;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
@@ -27,6 +30,23 @@ public class ManufacturerResolver {
                 .map (domainMapper::toManufacturer)
                 .toList ();
 
+    }
+
+    @DgsQuery
+    public Connection<Manufacturer> manufacturersPagination (
+            @InputArgument Optional<ManufacturerInput> manufacturerInput,
+            DataFetchingEnvironment dataFetchingEnvironment,
+            @InputArgument Optional<Integer> first,
+            @InputArgument Optional<Integer> last,
+            @InputArgument Optional<String> after,
+            @InputArgument Optional<String> before) {
+
+        List<Manufacturer> allManufacturers = manufacturerService.findManufacturers (manufacturerInput)
+                .stream ()
+                .map (domainMapper::toManufacturer)
+                .toList ();
+
+        return new SimpleListConnection<> (allManufacturers).get (dataFetchingEnvironment);
     }
 
 }
