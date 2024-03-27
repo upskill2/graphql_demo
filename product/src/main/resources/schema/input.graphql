@@ -1,13 +1,13 @@
 input ManufacturerInput {
     name            : String
     originCountry   : String
-    sorts           : [SortInput!]
+    sorts           : SortInput
 }
 
 input SeriesInput {
     manufacturer    : ManufacturerInput
     name            : String
-    sorts           : [SortInput!]
+    sorts           : SortInput
 }
 
 input ModelInput {
@@ -16,7 +16,7 @@ input ModelInput {
     isAvailable     : Boolean
     transmission    : Transmission
     exteriorColors  : String
-    sorts           : [SortInput!]
+    sorts           : SortInput
     price           : NumericComparisonInput
 }
 

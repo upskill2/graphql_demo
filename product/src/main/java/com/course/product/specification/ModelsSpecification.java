@@ -18,7 +18,32 @@ public class ModelsSpecification extends BaseSpecification {
     public static final String FIELD_IS_AVAILABLE = "isAvailable";
     public static final String SERIES_ENTITY = "seriesEntity";
     public static final String FIELD_COLOR = "exteriorColor";
+    public static final String ON_THE_ROAD_PRICE = "onTheRoadPrice";
 
+
+    public static Specification<ModelsEntity> priceIsGraterThan (int value) {
+        return ((root, query, criteriaBuilder) -> (
+                criteriaBuilder.greaterThanOrEqualTo (
+                        root.get (ON_THE_ROAD_PRICE),
+                        value
+                )));
+    }
+
+    public static Specification<ModelsEntity> priceIsLessThan (int value) {
+        return ((root, query, criteriaBuilder) -> (
+                criteriaBuilder.lessThanOrEqualTo (
+                        root.get (ON_THE_ROAD_PRICE),
+                        value
+                )));
+    }
+
+    public static Specification<ModelsEntity> priceIsBetween (int lower, int upper) {
+        return ((root, query, criteriaBuilder) -> (
+                criteriaBuilder.between (
+                        root.get (ON_THE_ROAD_PRICE),
+                        lower, upper
+                )));
+    }
 
     public static Specification<ModelsEntity> colorsListIgnoreCase (String colorList) {
         return ((root, query, criteriaBuilder) -> {

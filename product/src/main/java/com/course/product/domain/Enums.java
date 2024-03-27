@@ -22,7 +22,7 @@ public class Enums {
         HYBRID
     }
 
-    public enum NumericComparison {
+    public enum NumericComparisonDomain {
         GREATER_THAN_EQUALS,
         LESS_THAN_EQUALS,
                 BETWEEN_INCLUSIVE

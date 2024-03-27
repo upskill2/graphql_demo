@@ -1,8 +1,6 @@
 package com.course.product.component;
 
-import com.course.product.generated.types.ManufacturerInput;
-import com.course.product.generated.types.Model;
-import com.course.product.generated.types.ModelInput;
+import com.course.product.generated.types.*;
 import com.course.product.repository.ManufacturersRepository;
 import com.course.product.service.ModelService;
 import com.course.product.util.DomainMapper;
@@ -28,7 +26,8 @@ public class ModelResolver {
 
     @DgsQuery
     public List<Model> modelsWithSpecification (@InputArgument Optional<ModelInput> modelInput) {
-        return modelService.findModels (modelInput)
+        List<SortInput> sortInput = modelInput.get ().getSorts () != null ? List.of( modelInput.get ().getSorts ()) : null;
+        return modelService.findModels (modelInput, Optional.ofNullable (modelInput.orElse (null).getPrice ()))
                 .stream ()
                 .map (domainMapper::toModels)
                 .toList ();
