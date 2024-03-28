@@ -31,4 +31,9 @@ type Query {
     findModelByAvailability(modelInput: ModelInput): [Model]
     findModelByPrice(modelInput: ModelInput): [Model]
     modelsWithSpecification(modelInput: ModelInput!): [Model]
+    modelPagination(
+        modelInput: ModelInput,
+        page: Int,
+        size: Int
+    ): ModelPagination
 }

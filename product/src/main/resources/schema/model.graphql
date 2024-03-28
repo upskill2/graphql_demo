@@ -1,4 +1,4 @@
-type Model {
+type Model @connection {
     uuid            : String!
     name            : String
     onTheRoadPrice  : NonNegativeInt!
@@ -20,6 +20,7 @@ type Model {
 }
 
 type ModelPagination {
+    modelConnection: ModelConnection
     page                    : Int!
     size                    : Int!
     totalPage               : Int!

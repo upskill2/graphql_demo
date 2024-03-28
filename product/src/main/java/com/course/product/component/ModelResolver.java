@@ -1,5 +1,6 @@
 package com.course.product.component;
 
+import com.course.product.entity.ModelsEntity;
 import com.course.product.generated.types.*;
 import com.course.product.repository.ManufacturersRepository;
 import com.course.product.service.ModelService;
@@ -7,7 +8,11 @@ import com.course.product.util.DomainMapper;
 import com.netflix.graphql.dgs.DgsComponent;
 import com.netflix.graphql.dgs.DgsQuery;
 import com.netflix.graphql.dgs.InputArgument;
+import graphql.relay.Connection;
+import graphql.relay.SimpleListConnection;
+import graphql.schema.DataFetchingEnvironment;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 
 import java.util.List;
 import java.util.Optional;
@@ -25,8 +30,31 @@ public class ModelResolver {
     private DomainMapper domainMapper;
 
     @DgsQuery
+    public ModelPagination modelPagination (@InputArgument ModelInput modelInput,
+                                            @InputArgument Optional<Integer> page,
+                                            @InputArgument Optional<Integer> size,
+                                            DataFetchingEnvironment dataFetchingEnvironment) {
+
+        Page<ModelsEntity> pagebleModels = modelService.findPagebleModels (
+                Optional.of (modelInput), page, size);
+
+        ModelPagination modelPagination = new ModelPagination ();
+
+        final Connection<ModelsEntity> modelConnection = new SimpleListConnection<> (pagebleModels.getContent ())
+                .get (dataFetchingEnvironment);
+
+        modelPagination.setModelConnection (modelConnection);
+        modelPagination.setPage (pagebleModels.getNumber ());
+        modelPagination.setSize (pagebleModels.getSize ());
+        modelPagination.setTotalElement (pagebleModels.getTotalPages ());
+        modelPagination.setTotalElement (pagebleModels.getTotalElements ());
+
+        return modelPagination;
+    }
+
+    @DgsQuery
     public List<Model> modelsWithSpecification (@InputArgument Optional<ModelInput> modelInput) {
-        List<SortInput> sortInput = modelInput.get ().getSorts () != null ? List.of( modelInput.get ().getSorts ()) : null;
+        List<SortInput> sortInput = modelInput.get ().getSorts () != null ? List.of (modelInput.get ().getSorts ()) : null;
         return modelService.findModels (modelInput, Optional.ofNullable (modelInput.orElse (null).getPrice ()))
                 .stream ()
                 .map (domainMapper::toModels)
