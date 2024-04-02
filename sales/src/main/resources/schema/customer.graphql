@@ -32,6 +32,7 @@ type CustomerMutationResponse implements MutationResponse {
 }
 
 type CustomerPagination {
+    customerConnection: CustomerConnection
     page                    : Int!
     size                    : Int!
     totalPage               : Int!

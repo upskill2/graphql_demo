@@ -37,6 +37,7 @@ dependencies {
     implementation 'com.netflix.graphql.dgs:graphql-dgs-extended-scalars'
     implementation 'com.netflix.graphql.dgs:graphql-dgs-spring-boot-starter'
     implementation 'com.netflix.graphql.dgs:graphql-dgs-subscriptions-websockets-autoconfigure'
+    implementation 'com.netflix.graphql.dgs:graphql-dgs-pagination'
     implementation 'org.ocpsoft.prettytime:prettytime:5.0.1.Final'
     implementation 'org.bouncycastle:bcprov-jdk15on:1.68'
     implementation "org.mapstruct:mapstruct:1.5.5.Final"
@@ -65,7 +66,8 @@ generateJava {
             "NonNegativeFloat": "java.lang.Double",
             "Url"           : "java.net.URL",
             "DateTime"      : "java.time.OffsetDateTime",
-            "PositiveFloat" : "java.lang.Double",
-            "NegativeFloat" : "java.lang.Double"
+            "PositiveFloat" : "java.lang.Integer",
+            "NegativeFloat" : "java.lang.Integer",
+            "CustomerConnection": "graphql.relay.Connection<com.course.entity.CustomerEntity>",
     ]
 }
