@@ -2,6 +2,7 @@ package com.course.contoller;
 
 import com.course.entity.CustomerEntity;
 import com.course.mapper.SalesMapper;
+import com.course.sales.generated.DgsConstants;
 import com.course.sales.generated.types.*;
 import com.course.service.CustomerService;
 import com.netflix.graphql.dgs.DgsComponent;
@@ -13,8 +14,15 @@ import graphql.relay.Connection;
 import graphql.relay.SimpleListConnection;
 import graphql.schema.DataFetchingEnvironment;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.InputStreamSource;
 import org.springframework.data.domain.Page;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -27,6 +35,28 @@ public class CustomerController {
 
     @Autowired
     private SalesMapper salesMapper;
+
+    @DgsMutation
+    public CustomerMutationResponse addDocumentToExistingCustomer (UniqueCustomerInput customer, String documentType
+            , DataFetchingEnvironment environment
+    ) throws IOException {
+        MultipartFile documentFile = environment.getArgument (DgsConstants.MUTATION.ADDDOCUMENTTOEXISTINGCUSTOMER_INPUT_ARGUMENT.DocumentFile);
+
+        File directory = new File ("sales/src/main/resources/schema");
+        File[] files = directory.listFiles ();
+
+
+        String filename = "";
+        File transferFile = null;
+        for (File file : files) {
+            filename = file.getName ();
+            final long length = file.length ();
+            transferFile = file;
+        }
+
+
+        return customerService.addDocumentToExistingCustomer (customer, documentType, transferFile);
+    }
 
     @DgsQuery
     public CustomerPagination customerPagination (@InputArgument (name = "customer") Optional<UniqueCustomerInput> uniqueCustomerInput,

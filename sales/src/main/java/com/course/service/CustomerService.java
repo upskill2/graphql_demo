@@ -2,13 +2,12 @@ package com.course.service;
 
 import com.course.entity.AddressEntity;
 import com.course.entity.CustomerEntity;
+import com.course.entity.DocumentEntity;
 import com.course.mapper.SalesMapper;
 import com.course.repositories.CustomerRepository;
-import com.course.sales.generated.types.AddAddressInput;
-import com.course.sales.generated.types.AddCustomerInput;
-import com.course.sales.generated.types.Customer;
-import com.course.sales.generated.types.UniqueCustomerInput;
+import com.course.sales.generated.types.*;
 import com.course.specification.CustomerSpecification;
+import com.netflix.graphql.dgs.exceptions.DgsEntityNotFoundException;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -18,6 +17,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
+import java.io.File;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -32,9 +32,32 @@ public class CustomerService {
     @Autowired
     private SalesMapper salesMapper;
 
+    public CustomerMutationResponse addDocumentToExistingCustomer (final UniqueCustomerInput customer,
+                                                                   final String documentType,
+                                                                   File file) {
+
+        final Optional<CustomerEntity> customerEntity = findUniqueCustomerEntity (customer);
+        if (customerEntity.isEmpty ()) {
+            throw new DgsEntityNotFoundException ("Customer not found");
+        }
+
+        final DocumentEntity documentEntity = new DocumentEntity ();
+        String documentPath = String.format ("%s/%s/%s-%s-%s", "https://dummy-storage.com",
+                customerEntity.get ().getUuid (), documentType, UUID.randomUUID (), file.getName ());
+        documentEntity.setDocumentType (documentType);
+        documentEntity.setDocumentPath (documentPath);
+
+        customerEntity.get ().getDocumentEntity ().add (documentEntity);
+        final CustomerEntity save = customerRepository.save (customerEntity.get ());
+
+        return new CustomerMutationResponse (true,
+                "Document saved successfully",
+                customerEntity.get ().getUuid ().toString ());
+    }
+
     public Page<CustomerEntity> findCustomers (Optional<UniqueCustomerInput> uniqueCustomerInput,
-                                         int page,
-                                         int size) {
+                                               int page,
+                                               int size) {
         PageRequest pageRequest = PageRequest.of (
                 Optional.of (page).orElse (0),
                 Optional.of (size).orElse (5),
@@ -65,7 +88,7 @@ public class CustomerService {
                 .map (salesMapper::toAddressEntity)
                 .toList ();
 
-        customerEntity.getAddressEntity ().addAll (addressEntity);
+        customerEntity.getAddresses ().addAll (addressEntity);
         return customerRepository.save (customerEntity);
     }
 
@@ -111,5 +134,4 @@ public class CustomerService {
                 .stream ().
                 findFirst ();
     }
-
 }

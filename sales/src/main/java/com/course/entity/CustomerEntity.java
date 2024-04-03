@@ -29,5 +29,11 @@ public class CustomerEntity {
     @JoinColumn (name = "customer_uuid")
     @Cascade (org.hibernate.annotations.CascadeType.ALL)
     @Fetch (FetchMode.SUBSELECT)
-    private List<AddressEntity> addressEntity;
+    private List<AddressEntity> addresses;
+
+    @OneToMany //(mappedBy = "customerEntity")
+    @JoinColumn (name = "customer_uuid")
+    @Cascade (org.hibernate.annotations.CascadeType.ALL)
+    @Fetch (FetchMode.SUBSELECT)
+    private List<DocumentEntity> documentEntity;
 }

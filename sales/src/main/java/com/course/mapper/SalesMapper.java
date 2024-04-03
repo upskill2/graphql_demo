@@ -2,10 +2,8 @@ package com.course.mapper;
 
 import com.course.entity.AddressEntity;
 import com.course.entity.CustomerEntity;
-import com.course.sales.generated.types.AddAddressInput;
-import com.course.sales.generated.types.AddCustomerInput;
-import com.course.sales.generated.types.Customer;
-import com.course.sales.generated.types.SalesAddress;
+import com.course.entity.DocumentEntity;
+import com.course.sales.generated.types.*;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;
@@ -18,15 +16,31 @@ public interface SalesMapper {
 
     SalesAddress toSalesAddress (AddressEntity addressEntity);
 
-    @Mapping (target = "addresses", source = "addressEntity", qualifiedByName = "toAddressEntityTwo")
+  //  @Mapping (target = "addresses", source = "addressEntity", qualifiedByName = "toAddressEntityTwo")
+    @Mapping (target = "documentEntity", source = "documentEntity", qualifiedByName = "toDocument")
     Customer toCustomer (CustomerEntity customerEntity);
 
-    @Mapping (target = "addressEntity", source = "addresses", qualifiedByName = "toAddressEntity")
+   // @Mapping (target = "addressEntity", source = "addresses", qualifiedByName = "toAddressEntity")
     CustomerEntity toCustomerEntity (AddCustomerInput addCustomerInput);
 
 
-    @Mapping (target = "addressEntity", source = "addresses", qualifiedByName = "toAddressEntityFromCustomer")
+ //   @Mapping (target = "addresses", source = "addresses", qualifiedByName = "toAddressEntityFromCustomer")
+    @Mapping (target = "documentEntity", source = "documentEntity", qualifiedByName = "toDocumentEntity")
     CustomerEntity toCustomerEntityFromCustomer (Customer customer);
+
+    @Named ("toDocument")
+    Document toDocument (DocumentEntity documentEntity);
+
+    @Named ("toDocumentEntity")
+    public static List<DocumentEntity> toDocumentEntity (List<Document> documentEntity) {
+        return documentEntity.stream ()
+                .map (document -> new DocumentEntity (
+                        UUID.fromString (document.getUuid ()),
+                        document.getDocumentType (),
+                        document.getDocumentPath ()))
+                .toList ();
+    }
+
 
     @Named ("toAddressEntity")
     AddressEntity toAddressEntity (AddAddressInput addAddressInput);

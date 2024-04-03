@@ -17,7 +17,7 @@ type Mutation {
     addDocumentToExistingCustomer(
         customer        : UniqueCustomerInput!
         documentType    : String! @NotBlank @Size(max: 30)
-        documentFile    : Upload!
+        documentFile    : Upload
     ): CustomerMutationResponse!
 
     updateExistingCustomer(

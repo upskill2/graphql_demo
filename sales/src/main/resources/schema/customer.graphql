@@ -6,7 +6,7 @@ type Customer @connection {
     email               : String!
     salesOrders         : [SalesOrder!]
     addresses           : [SalesAddress!]
-    documents           : [Document!]
+    documentEntity           : [Document!]
 }
 
 input AddCustomerInput {
