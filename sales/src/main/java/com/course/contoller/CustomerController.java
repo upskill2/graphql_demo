@@ -37,6 +37,19 @@ public class CustomerController {
     private SalesMapper salesMapper;
 
     @DgsMutation
+    CustomerMutationResponse updateExistingCustomer (Optional<UniqueCustomerInput> customer,
+                                                     @InputArgument (name = "customerUpdate") Optional<UpdateCustomerInput> updateCustomerInput) {
+        if (customer.isEmpty () || updateCustomerInput.isEmpty ()) {
+            return CustomerMutationResponse.newBuilder ()
+                    .success (false)
+                    .message ("Customer not found")
+                    .build ();
+        } else {
+            return customerService.updateExistingCustomer (customer.get (), updateCustomerInput.get ());
+        }
+    }
+
+    @DgsMutation
     public CustomerMutationResponse addDocumentToExistingCustomer (UniqueCustomerInput customer, String documentType
             , DataFetchingEnvironment environment
     ) throws IOException {

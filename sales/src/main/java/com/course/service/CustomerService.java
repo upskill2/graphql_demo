@@ -32,6 +32,32 @@ public class CustomerService {
     @Autowired
     private SalesMapper salesMapper;
 
+    public CustomerMutationResponse updateExistingCustomer (final UniqueCustomerInput uniqueCustomerInput,
+                                                            final UpdateCustomerInput updateCustomerInput) {
+        Optional<Customer> customer = findUniqueCustomer (uniqueCustomerInput);
+        CustomerEntity customerEntity = customer.map (salesMapper::toCustomerEntityFromCustomer)
+                .orElseThrow (() -> new DgsEntityNotFoundException ("Customer not found"));
+        if (StringUtils.isAllBlank (updateCustomerInput.getEmail (), updateCustomerInput.getPhone ())) {
+            throw new IllegalArgumentException ("At least one field should be provided");
+        }
+
+        Optional<String> email = Optional.ofNullable (updateCustomerInput.getEmail ());
+        Optional<String> phone = Optional.ofNullable (updateCustomerInput.getPhone ());
+
+        if (customer.isPresent ()) {
+            customerEntity.setEmail (email.orElse (customer.get ().getEmail ()));
+            customerEntity.setPhone (phone.orElse (customer.get ().getUuid ()));
+            final CustomerEntity save = customerRepository.save (customerEntity);
+            return new CustomerMutationResponse (true,
+                    "Customer updated successfully",
+                    save.getUuid ().toString ());
+        } else {
+            return new CustomerMutationResponse (false,
+                    "Customer not found",
+                    uniqueCustomerInput.getUuid ());
+        }
+    }
+
     public CustomerMutationResponse addDocumentToExistingCustomer (final UniqueCustomerInput customer,
                                                                    final String documentType,
                                                                    File file) {
