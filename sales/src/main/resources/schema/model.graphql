@@ -1,4 +1,17 @@
-type Model{
+interface Model{
     uuid                : String
+    salesPercentage     : NonNegativeFloat
+}
+
+type SimpleModel implements Model{
+    uuid            : String!
+    name            : String!
+    onTheRoadPrice  : PositiveFloat
+    transmission    : String
+    exteriorColor   : String
+    interiorColor   : String
+    releaseYear     : Int
+    bodyType        : String
+    fuel            : String
     salesPercentage     : NonNegativeFloat
 }

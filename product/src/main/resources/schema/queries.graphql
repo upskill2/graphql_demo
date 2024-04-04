@@ -22,6 +22,7 @@ type Query {
         before: String
     ): SeriesConnection
 
+    findSimpleModel(modelInput: ModelInput) : [ModelSimple]
     findModelByManufacturerName(manufacturerInput: ManufacturerInput!): [Model]
     findModelByCountry(manufacturerInput: ManufacturerInput!): [Model]
     findModelBySeriesName(modelInput: ModelInput!): [Model]

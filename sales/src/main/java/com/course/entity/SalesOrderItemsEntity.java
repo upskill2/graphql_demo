@@ -1,5 +1,6 @@
 package com.course.entity;
 
+import com.course.sales.generated.types.SimpleModel;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -16,9 +17,11 @@ public class SalesOrderItemsEntity {
     @GeneratedValue
     private UUID uuid;
     private int quantity;
-/*    @ManyToOne
-    @JoinColumn (name = "sales_order_uuid", nullable = false)
-    private SalesOrderEntity salesOrderEntity;*/
-    UUID modelUuid;
+    /*    @ManyToOne
+        @JoinColumn (name = "sales_order_uuid", nullable = false)
+        private SalesOrderEntity salesOrderEntity;*/
+    private UUID modelUuid;
+    @Transient
+    private SimpleModel simpleModel;
 
 }

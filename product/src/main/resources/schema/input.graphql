@@ -18,6 +18,7 @@ input ModelInput {
     exteriorColors  : String
     sorts           : SortInput
     price           : NumericComparisonInput
+    modelUuid       : String
 }
 
 input NumericComparisonInput {

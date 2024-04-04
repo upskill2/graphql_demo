@@ -29,6 +29,21 @@ public class ModelResolver {
     @Autowired
     private DomainMapper domainMapper;
 
+
+    @DgsQuery
+    public List<ModelSimple> findSimpleModel (ModelInput modelInput) {
+        if (modelInput.getModelUuid () == null || modelInput.getModelUuid ().isEmpty ()) {
+            return modelService.findModels (Optional.of (modelInput), Optional.empty ())
+                    .stream ()
+                    .map (domainMapper::toModelSimple)
+                    .toList ();
+        }
+        final UUID modelsUuuid = UUID.fromString (modelInput.getModelUuid ());
+        final ModelsEntity modelById = modelService.findModelById (modelsUuuid);
+
+        return List.of (domainMapper.toModelSimple (modelById));
+    }
+
     @DgsQuery
     public ModelPagination modelPagination (@InputArgument ModelInput modelInput,
                                             @InputArgument Optional<Integer> page,

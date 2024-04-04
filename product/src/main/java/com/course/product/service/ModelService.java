@@ -156,4 +156,9 @@ public class ModelService {
         };
 
     }
+
+    public ModelsEntity findModelById (UUID modelsUuid) {
+        return modelsRepository.findById (modelsUuid).orElse (null);
+    }
+
 }

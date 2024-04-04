@@ -16,6 +16,7 @@ public interface SalesMapper {
 
     default SalesOrderEntity toSalesOrderEntity (AddSalesOrderInput addSalesOrderInput) {
 
+        SimpleModel simpleModel = new SimpleModel ();
 
         return SalesOrderEntity.builder ()
                 .orderNumber ("SALES-" + RandomStringUtils.randomAlphabetic (8).toUpperCase ())

@@ -6,12 +6,16 @@ import com.course.product.entity.ModelsEntity;
 import com.course.product.entity.SeriesEntity;
 import com.course.product.generated.types.Manufacturer;
 import com.course.product.generated.types.Model;
+import com.course.product.generated.types.ModelSimple;
 import com.course.product.generated.types.Series;
 import org.mapstruct.Mapper;
+import org.mapstruct.ap.shaded.freemarker.ext.beans.SimpleMapModel;
 
 @Mapper (componentModel = "spring")
 public interface DomainMapper {
 
+
+    ModelSimple toModelSimple (ModelsEntity modelsEntity);
     default Manufacturer toManufacturer (ManufacturersEntity manufacturersEntity) {
         return Manufacturer.newBuilder ()
                 .name (manufacturersEntity.getName ())

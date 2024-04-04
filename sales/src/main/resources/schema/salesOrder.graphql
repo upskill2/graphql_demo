@@ -18,4 +18,5 @@ type SalesOrderMutationResponse implements MutationResponse {
     customerUuid    : String
     salesOrderUuid  : String
     orderNumber     : String
+    simpleModel     : SimpleModel
 }
