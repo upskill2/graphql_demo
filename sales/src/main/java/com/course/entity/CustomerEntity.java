@@ -36,4 +36,8 @@ public class CustomerEntity {
     @Cascade (org.hibernate.annotations.CascadeType.ALL)
     @Fetch (FetchMode.SUBSELECT)
     private List<DocumentEntity> documentEntity;
+
+    @OneToMany (mappedBy = "customerEntity", fetch = FetchType.EAGER)
+    @Cascade (org.hibernate.annotations.CascadeType.ALL)
+    private List<SalesOrderEntity> salesOrderEntity;
 }

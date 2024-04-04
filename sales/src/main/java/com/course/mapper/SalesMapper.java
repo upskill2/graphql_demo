@@ -1,9 +1,8 @@
 package com.course.mapper;
 
-import com.course.entity.AddressEntity;
-import com.course.entity.CustomerEntity;
-import com.course.entity.DocumentEntity;
+import com.course.entity.*;
 import com.course.sales.generated.types.*;
+import org.apache.commons.lang3.RandomStringUtils;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;
@@ -14,17 +13,40 @@ import java.util.UUID;
 @Mapper (componentModel = "spring")
 public interface SalesMapper {
 
+
+    default SalesOrderEntity toSalesOrderEntity (AddSalesOrderInput addSalesOrderInput) {
+
+
+        return SalesOrderEntity.builder ()
+                .orderNumber ("SALES-" + RandomStringUtils.randomAlphabetic (8).toUpperCase ())
+                .financeEntity (toFinanceEntity (addSalesOrderInput.getFinance ()))
+                .salesOrderItemsEntity (addSalesOrderInput.getSalesOrderItems ().stream ()
+                        .map (this::toSalesOrderItemsEntity)
+                        .toList ())
+                .financeEntity (toFinanceEntity (addSalesOrderInput.getFinance ()))
+                .build ();
+    }
+
+    SalesOrderItemsEntity toSalesOrderItemsEntity (SalesOrderItemInput salesOrderItemInput);
+
+    @Mapping (target = "loanEntity", source = "loan")
+    FinanceEntity toFinanceEntity (FinanceInput financeInput);
+
+    Loan toLoan (LoanEntity loanEntity);
+
+    LoanEntity toLoanEntity (LoanInput loanInput);
+
     SalesAddress toSalesAddress (AddressEntity addressEntity);
 
-  //  @Mapping (target = "addresses", source = "addressEntity", qualifiedByName = "toAddressEntityTwo")
+    //  @Mapping (target = "addresses", source = "addressEntity", qualifiedByName = "toAddressEntityTwo")
     @Mapping (target = "documentEntity", source = "documentEntity", qualifiedByName = "toDocument")
     Customer toCustomer (CustomerEntity customerEntity);
 
-   // @Mapping (target = "addressEntity", source = "addresses", qualifiedByName = "toAddressEntity")
+    // @Mapping (target = "addressEntity", source = "addresses", qualifiedByName = "toAddressEntity")
     CustomerEntity toCustomerEntity (AddCustomerInput addCustomerInput);
 
 
- //   @Mapping (target = "addresses", source = "addresses", qualifiedByName = "toAddressEntityFromCustomer")
+    //   @Mapping (target = "addresses", source = "addresses", qualifiedByName = "toAddressEntityFromCustomer")
     @Mapping (target = "documentEntity", source = "documentEntity", qualifiedByName = "toDocumentEntity")
     CustomerEntity toCustomerEntityFromCustomer (Customer customer);
 

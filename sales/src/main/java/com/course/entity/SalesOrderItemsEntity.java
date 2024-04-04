@@ -16,9 +16,9 @@ public class SalesOrderItemsEntity {
     @GeneratedValue
     private UUID uuid;
     private int quantity;
-    @ManyToOne
+/*    @ManyToOne
     @JoinColumn (name = "sales_order_uuid", nullable = false)
-    private SalesOrderEntity salesOrderEntity;
+    private SalesOrderEntity salesOrderEntity;*/
     UUID modelUuid;
 
 }

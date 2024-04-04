@@ -67,7 +67,7 @@ generateJava {
             "NonNegativeFloat"  : "java.lang.Double",
             "Url"               : "java.net.URL",
             "DateTime"          : "java.time.OffsetDateTime",
-            "PositiveFloat"     : "java.lang.Integer",
+            "PositiveFloat"     : "java.lang.Double",
             "NegativeFloat"     : "java.lang.Integer",
             "CustomerConnection": "graphql.relay.Connection<com.course.entity.CustomerEntity>",
             "Upload"            : "org.springframework.web.multipart.MultipartFile",
