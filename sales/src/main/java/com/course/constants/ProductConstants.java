@@ -5,6 +5,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor (access = lombok.AccessLevel.PRIVATE)
 public class ProductConstants {
 
+    public static final String PRODUCT_URL = "http://localhost:8080/graphql";
     public static String prepareQuery (String modelUuid) {
 
         return String.format (

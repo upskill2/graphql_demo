@@ -15,16 +15,13 @@ public interface SalesMapper {
 
 
     default SalesOrderEntity toSalesOrderEntity (AddSalesOrderInput addSalesOrderInput) {
-
-        SimpleModel simpleModel = new SimpleModel ();
-
         return SalesOrderEntity.builder ()
                 .orderNumber ("SALES-" + RandomStringUtils.randomAlphabetic (8).toUpperCase ())
-                .financeEntity (toFinanceEntity (addSalesOrderInput.getFinance ()))
-                .salesOrderItemsEntity (addSalesOrderInput.getSalesOrderItems ().stream ()
+                .finance (toFinanceEntity (addSalesOrderInput.getFinance ()))
+                .salesOrderItems (addSalesOrderInput.getSalesOrderItems ().stream ()
                         .map (this::toSalesOrderItemsEntity)
                         .toList ())
-                .financeEntity (toFinanceEntity (addSalesOrderInput.getFinance ()))
+                .finance (toFinanceEntity (addSalesOrderInput.getFinance ()))
                 .build ();
     }
 
@@ -32,6 +29,9 @@ public interface SalesMapper {
 
     @Mapping (target = "loanEntity", source = "loan")
     FinanceEntity toFinanceEntity (FinanceInput financeInput);
+
+    @Mapping (target = "loanEntity", source = "loan")
+    FinanceEntity toFinanceEntityFromFinance (Finance finance);
 
     Loan toLoan (LoanEntity loanEntity);
 
@@ -41,15 +41,69 @@ public interface SalesMapper {
 
     //  @Mapping (target = "addresses", source = "addressEntity", qualifiedByName = "toAddressEntityTwo")
     @Mapping (target = "documentEntity", source = "documentEntity", qualifiedByName = "toDocument")
+    @Mapping (target = "salesOrders", source = "salesOrders", qualifiedByName = "toSalesOrderItem")
     Customer toCustomer (CustomerEntity customerEntity);
 
     // @Mapping (target = "addressEntity", source = "addresses", qualifiedByName = "toAddressEntity")
     CustomerEntity toCustomerEntity (AddCustomerInput addCustomerInput);
 
+    @Named ("toSalesOrderItem")
+    public static List<SalesOrder> toSalesOrderItem (List<SalesOrderEntity> salesOrderEntities) {
 
-    //   @Mapping (target = "addresses", source = "addresses", qualifiedByName = "toAddressEntityFromCustomer")
-    @Mapping (target = "documentEntity", source = "documentEntity", qualifiedByName = "toDocumentEntity")
-    CustomerEntity toCustomerEntityFromCustomer (Customer customer);
+        SalesOrderItemsEntity salesOrderItemsEntity = salesOrderEntities.get (0).getSalesOrderItems ().get (0);
+        SalesOrderItem salesOrderItem = SalesOrderItem.newBuilder ()
+                .simpleModel (salesOrderItemsEntity.getSimpleModel ())
+                .quantity (salesOrderItemsEntity.getQuantity ())
+                .uuid (salesOrderItemsEntity.getUuid ().toString ())
+                .modelUuid (salesOrderItemsEntity.getModelUuid ().toString ())
+                .notes (RandomStringUtils.randomAlphabetic (10))
+                .build ();
+
+        return salesOrderEntities.stream ()
+                .map (salesOrderEntity -> SalesOrder.newBuilder ()
+                        .salesOrderItems (List.of (salesOrderItem))
+                        .uuid (salesOrderEntity.getUuid ().toString ())
+                        .orderDateTime (salesOrderEntity.getOrderDateTime ())
+                        .orderNumber (salesOrderEntity.getOrderNumber ())
+                        .salesOrderItems (List.of (salesOrderItem))
+                        .build ())
+                .toList ();
+    }
+
+    default CustomerEntity toCustomerEntityFromCustomer (Customer customer) {
+        SalesOrderItemsEntity salesOrderItemsEntity = new SalesOrderItemsEntity ();
+
+        final SalesOrderItem salesOrderItem1 = customer.getSalesOrders ().get (0).getSalesOrderItems ().get (0);
+        salesOrderItemsEntity.setSimpleModel (salesOrderItem1.getSimpleModel ());
+        salesOrderItemsEntity.setQuantity (salesOrderItem1.getQuantity ());
+        salesOrderItemsEntity.setUuid (UUID.fromString (salesOrderItem1.getUuid ()));
+        salesOrderItemsEntity.setModelUuid (UUID.fromString (salesOrderItem1.getModelUuid ()));
+
+        return CustomerEntity.builder ()
+                .uuid (UUID.fromString (customer.getUuid ()))
+                .fullName (customer.getFullName ())
+                .email (customer.getEmail ())
+                .phone (customer.getPhone ())
+                .birthDate (customer.getBirthDate ())
+                .addresses (customer.getAddresses ().stream ()
+                        .map (SalesMapper::toAddressEntityFromCustomer)
+                        .toList ())
+                .documentEntity (customer.getDocumentEntity ().stream ().map (document -> new DocumentEntity (
+                                UUID.fromString (document.getUuid ()),
+                                document.getDocumentType (),
+                                document.getDocumentPath ()))
+                        .toList ())
+                .salesOrders (customer.getSalesOrders ().stream ().
+                        map (salesOrder -> SalesOrderEntity.builder ()
+                                .uuid (UUID.fromString (salesOrder.getUuid ()))
+                                .orderDateTime (salesOrder.getOrderDateTime ())
+                                .orderNumber (salesOrder.getOrderNumber ())
+                                .salesOrderItems (List.of (salesOrderItemsEntity))
+                                .build ())
+                        .toList ())
+                .build ();
+
+    }
 
     @Named ("toDocument")
     Document toDocument (DocumentEntity documentEntity);
@@ -69,14 +123,13 @@ public interface SalesMapper {
     AddressEntity toAddressEntity (AddAddressInput addAddressInput);
 
     @Named ("toAddressEntityFromCustomer")
-    public static List<AddressEntity> toAddressEntity (List<SalesAddress> addresses) {
-        return addresses.stream ()
-                .map (address -> new AddressEntity (
-                        UUID.fromString (address.getUuid ()),
-                        address.getStreet (),
-                        address.getCity (),
-                        address.getZipcode ()))
-                .toList ();
+    public static AddressEntity toAddressEntityFromCustomer (SalesAddress addresses) {
+        AddressEntity addressEntity = new AddressEntity ();
+        addressEntity.setCity (addresses.getCity ());
+        addressEntity.setStreet (addresses.getStreet ());
+        addressEntity.setZipcode (addresses.getZipcode ());
+        addressEntity.setUuid (UUID.fromString (addresses.getUuid ()));
+        return addressEntity;
 
     }
 
@@ -91,10 +144,5 @@ public interface SalesMapper {
                 .toList ();
 
     }
-
-/*     @Named ("toEmptySolutions")
-     public static List<Solutions> toEmptySolutions (ProblemCreateInput problemCreateInput) {
-          return new ArrayList<> ();
-     }*/
 
 }

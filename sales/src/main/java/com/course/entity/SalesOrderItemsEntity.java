@@ -2,8 +2,7 @@ package com.course.entity;
 
 import com.course.sales.generated.types.SimpleModel;
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.UUID;
 
@@ -11,6 +10,9 @@ import java.util.UUID;
 @Table (name = "sales_order_items")
 @Getter
 @Setter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class SalesOrderItemsEntity {
 
     @Id

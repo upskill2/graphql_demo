@@ -90,11 +90,12 @@ public class CustomerService {
                 Sort.by (CustomerSpecification.FIELD_EMAIL));
 
         if (uniqueCustomerInput.isPresent ()) {
-            final Optional<CustomerEntity> uniqueCustomer = findUniqueCustomer (uniqueCustomerInput.get ())
+            final Optional<Customer> customer = findUniqueCustomer (uniqueCustomerInput.get ());
+            final Optional<CustomerEntity> uniqueCustomer = customer
                     .map (salesMapper::toCustomerEntityFromCustomer);
             return uniqueCustomer.isPresent () ?
                     new PageImpl<> (
-                            List.of (uniqueCustomer.get ()), pageRequest, 1) :
+                            List.of (uniqueCustomer.get ()), pageRequest, 10) :
                     new PageImpl<> (Collections.emptyList (), pageRequest, 0);
         }
         return customerRepository.findAll (pageRequest);

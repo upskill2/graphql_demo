@@ -1,8 +1,7 @@
 package com.course.entity;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
@@ -15,6 +14,9 @@ import java.util.UUID;
 @Table (name = "customers")
 @Getter
 @Setter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class CustomerEntity {
 
     @GeneratedValue
@@ -31,13 +33,13 @@ public class CustomerEntity {
     @Fetch (FetchMode.SUBSELECT)
     private List<AddressEntity> addresses;
 
-    @OneToMany //(mappedBy = "customerEntity")
+    @OneToMany (fetch = FetchType.EAGER) //(mappedBy = "customerEntity")
     @JoinColumn (name = "customer_uuid")
     @Cascade (org.hibernate.annotations.CascadeType.ALL)
     @Fetch (FetchMode.SUBSELECT)
     private List<DocumentEntity> documentEntity;
 
-    @OneToMany (mappedBy = "customerEntity", fetch = FetchType.EAGER)
+    @OneToMany (mappedBy = "customerEntity", fetch = FetchType.LAZY)
     @Cascade (org.hibernate.annotations.CascadeType.ALL)
-    private List<SalesOrderEntity> salesOrderEntity;
+    private List<SalesOrderEntity> salesOrders;
 }

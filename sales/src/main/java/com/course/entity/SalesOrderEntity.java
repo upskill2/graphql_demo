@@ -7,7 +7,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -29,18 +29,18 @@ public class SalesOrderEntity {
     private CustomerEntity customerEntity;
 
     @CreationTimestamp
-    private LocalDateTime orderDateTime;
+    private OffsetDateTime orderDateTime;
 
     @Column (unique = true)
     private String orderNumber;
 
-    @OneToMany (fetch = FetchType.LAZY)
+    @OneToMany (fetch = FetchType.EAGER)
     @JoinColumn (name = "sales_order_uuid")
     @Cascade (org.hibernate.annotations.CascadeType.ALL)
     @Fetch (FetchMode.SUBSELECT)
-    private List<SalesOrderItemsEntity> salesOrderItemsEntity;
+    private List<SalesOrderItemsEntity> salesOrderItems;
 
-    @OneToOne (fetch = FetchType.LAZY, mappedBy = "salesOrderEntity")
+    @OneToOne (fetch = FetchType.EAGER, mappedBy = "salesOrderEntity")
     @Cascade (org.hibernate.annotations.CascadeType.ALL)
-    private FinanceEntity financeEntity;
+    private FinanceEntity finance;
 }

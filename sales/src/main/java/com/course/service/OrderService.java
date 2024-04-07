@@ -1,11 +1,12 @@
 package com.course.service;
 
 import com.course.entity.CustomerEntity;
+import com.course.entity.FinanceEntity;
 import com.course.entity.SalesOrderEntity;
+import com.course.entity.SalesOrderItemsEntity;
 import com.course.mapper.SalesMapper;
 import com.course.repositories.CustomerRepository;
 import com.course.repositories.SalesOrderRepository;
-import com.course.rest.SimpleModelClient;
 import com.course.sales.generated.types.AddSalesOrderInput;
 import com.course.sales.generated.types.SalesOrderItemInput;
 import com.course.sales.generated.types.SalesOrderMutationResponse;
@@ -45,8 +46,19 @@ public class OrderService {
         final Map<String, SimpleModel> simpleModelMap = productService.loadSimpleModel (modelUuid);
 
         // Add the new sales order
-        final SalesOrderEntity savedOrder = orderRepository.save (salesMapper.toSalesOrderEntity (salesOrder));
+        final SalesOrderEntity salesOrderEntity = salesMapper.toSalesOrderEntity (salesOrder);
+        final SalesOrderItemsEntity salesOrderItems = salesOrder.getSalesOrderItems ().stream ()
+                .map (salesMapper::toSalesOrderItemsEntity).findFirst ().orElse (new SalesOrderItemsEntity ());
+        final FinanceEntity financeEntity = salesMapper.toFinanceEntity (salesOrder.getFinance ());
 
+
+        salesOrderEntity.setCustomerEntity (customerEntity.get ());
+        financeEntity.setSalesOrderEntity (salesOrderEntity);
+        salesOrderEntity.setSalesOrderItems (List.of (salesOrderItems));
+        salesOrderItems.setSimpleModel (simpleModelMap.get (modelUuid));
+        salesOrderEntity.setFinance (financeEntity);
+
+        final SalesOrderEntity savedOrder = orderRepository.save (salesOrderEntity);
 
         return SalesOrderMutationResponse.newBuilder ()
                 .orderNumber (savedOrder.getOrderNumber ())
