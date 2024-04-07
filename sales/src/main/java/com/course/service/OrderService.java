@@ -15,10 +15,7 @@ import com.netflix.graphql.dgs.exceptions.DgsEntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 public class OrderService {
@@ -43,7 +40,7 @@ public class OrderService {
         }
 
         String modelUuid = salesOrder.getSalesOrderItems ().stream ().map (SalesOrderItemInput::getModelUuid).findFirst ().orElse ("");
-        final Map<String, SimpleModel> simpleModelMap = productService.loadSimpleModel (modelUuid);
+        final Map<String, SimpleModel> simpleModelMap = productService.loadSimpleModel (Set.of (modelUuid));
 
         // Add the new sales order
         final SalesOrderEntity salesOrderEntity = salesMapper.toSalesOrderEntity (salesOrder);

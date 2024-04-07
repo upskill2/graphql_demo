@@ -1,4 +1,4 @@
-package com.course.rest;
+package com.course.graphqlclient;
 
 import com.netflix.graphql.dgs.client.*;
 import org.springframework.beans.factory.annotation.Autowired;

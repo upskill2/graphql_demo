@@ -2,7 +2,8 @@ package com.course.service;
 
 import com.course.constants.ProductConstants;
 import com.course.mapper.SalesMapper;
-import com.course.rest.SimpleModelClient;
+import com.course.graphqlclient.SimpleModelClient;
+import com.course.restclient.ModelsRestClient;
 import com.course.sales.generated.types.SimpleModel;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -29,15 +30,20 @@ public class ProductService {
     @Autowired
     private ObjectMapper objectMapper;
 
-    public Map<String, SimpleModel> loadSimpleModel (String modelUUIDs) {
+    @Autowired
+    private ModelsRestClient modelsRestClient;
+
+    public Map<String, SimpleModel> loadSimpleModel (final Set<String> modelUUIDs) {
 
 
         Map<String, Set<String>> variableMap = Map.ofEntries (
-                Map.entry (ProductConstants.VARIABLE_NAME_MODEL_UUID, Set.of(modelUUIDs))
+                Map.entry (ProductConstants.VARIABLE_NAME_MODEL_UUID, modelUUIDs)
         );
 
+        final String anyUuid = modelUUIDs.stream ().findAny ().orElse ("");
+
         final GraphQLResponse graphQLResponse = simpleModelClient.fetchGraphQLResponse (
-                ProductConstants.prepareQuery(modelUUIDs),
+                ProductConstants.prepareQuery (anyUuid),
                 ProductConstants.OPERATION_NAME_SIMPLE_MODELS,
                 variableMap
         );
@@ -54,5 +60,10 @@ public class ProductService {
         }
 
 
+    }
+
+    public Map<String, SimpleModel> loadSimpleModelRest (final Set<String> keys) {
+        final List<SimpleModel> simpleModels = modelsRestClient.fetchSimpleModels (List.copyOf (keys));
+        return Maps.uniqueIndex (simpleModels, SimpleModel::getUuid);
     }
 }

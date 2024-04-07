@@ -161,4 +161,8 @@ public class ModelService {
         return modelsRepository.findById (modelsUuid).orElse (null);
     }
 
+    public List<ModelsEntity> findAllModelsById (final List<UUID> modelUuidsWithCommaSeparetor) {
+        return modelsRepository.findAllById (modelUuidsWithCommaSeparetor);
+    }
+
 }
